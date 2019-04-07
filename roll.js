@@ -29,26 +29,26 @@ module.exports = function roll(amount, difficulty, hunger) {
     var margin = 0;
     var title = "";
     var color = 0;
-    var description = "";
+    var description = amount + "d10 vs " + difficulty + " with " + hunger + " Hunger.";
     if(successes >= difficulty){
         margin = successes - difficulty;
         if(criticals > 0){
             if(messy){
                 color = 16749056;
                 title = 'Messy Critical!'
-                description = "Not you, but the beast succeeds";
+                //description = "Not you, but the beast succeeds";
             }   
             else{
                 color = 65280;
                 title = 'Critical Success!'
-                description = "You succeed with outstanding results";
+                //description = "You succeed with outstanding results";
             }
 
         }
         else{
             color = 33823;
             title = 'Success'
-            description = "You succeed"
+            //description = "You succeed"
         }
             
     }
@@ -58,13 +58,13 @@ module.exports = function roll(amount, difficulty, hunger) {
         {
             color = 16711680;
             title = 'Bestial Failure!'
-            description = 'You fail, and either the Beast gets angry at you, or it manifested and made you fail'
+            //description = 'You fail, and either the Beast gets angry at you, or it manifested and made you fail'
         }
         else
         {
             color = 0;
             title = 'Failure'
-            description = 'You fail'
+            //description = 'You fail'
         }
     }
 
