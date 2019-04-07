@@ -1,0 +1,5 @@
+node_modules/
+coverage/
+vtmv5.db
+config.json
+

@@ -1,0 +1,19 @@
+{
+    "name": "VtMv5-bot",
+    "version": "0.0.1",
+    "description": "A VtMv5 bot for Discord",
+    "main": "main.js",
+    "author": "Vito Chiarella",
+    "dependencies": {
+        "better-sqlite3": "^5.4.0",
+        "discord.js": "^11.4.2"
+    },
+    "scripts": {
+        "test": "jest",
+        "coverage": "jest --coverage"
+    },
+    "devDependencies": {
+        "jest": "^24.7.1",
+        "jest-mock-random": "^1.0.2"
+    }
+}
