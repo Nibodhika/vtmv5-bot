@@ -21,7 +21,7 @@ module.exports = function hunger(msg, args){
     }
     else {
 
-        if(! is_gm){
+        if(!is_gm){
             msg.reply("You can't do that");
         }
         else{

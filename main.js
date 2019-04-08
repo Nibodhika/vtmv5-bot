@@ -5,6 +5,7 @@ const client = new Discord.Client();
 const roll_cmd = require('./cmd/roll.js');
 const hunger_cmd = require('./cmd/hunger.js');
 const health_cmd = require('./cmd/health.js');
+const character_cmd = require('./cmd/character.js');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -37,6 +38,8 @@ client.on('message', msg => {
             hunger_cmd(msg, args);
         else if(cmd === 'health')
             health_cmd(msg, args);
+        else if(cmd === 'character')
+            character_cmd(msg, args);
         else{
             msg.reply("\nUnknown command, " + help_str);
         }

@@ -1,19 +1,29 @@
 const database = require('../database/database.js');
 
 module.exports = function roll(msg, args) {
-    var author = msg.author;
+    var who = msg.author;
     var amount = 1;
     var difficulty = 1;
-    var hunger = database.hunger.get(author);
+    var character = database.Character.find(who);
+    var hunger = 0
 
-    if(hunger === undefined)
-        hunger = 0;    
+    if(character != undefined)
+        hunger = character.sheet.hunger;    
     
     if(args.length > 1){
         amount = Number(args[1]);
         if(! Number.isInteger(amount)){
-            msg.reply("Amount '" + args[1] + "' is not an integer");
-            return 1;
+            // Not an integer, maybe a characteristic
+            amount = 0
+            var pool = args[1].split("+")
+            for(var i = 0; i < pool.length; i++){
+                var partial = character.get(pool[i])
+                if(partial === undefined){
+                    msg.reply("Amount '" + args[1] + "' is not an integer or a valid roll");
+                    return 1;
+                }
+                amount += partial
+            }
         }
     }
         

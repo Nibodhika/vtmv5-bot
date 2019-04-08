@@ -1,14 +1,10 @@
 module.exports = function(db){
-    // Create the table if it doesn't exist
-    const create = db.prepare('CREATE TABLE IF NOT EXISTS health (USER text UNIQUE NOT NULL, HEALTH INTEGER, SUPERFICIAL INTEGER DEFAULT 0, AGGRAVATED INTEGER DEFAULT 0)');
-    create.run()
 
     // Prepare the queries
-    const do_get = db.prepare('SELECT HEALTH, SUPERFICIAL, AGGRAVATED from health where USER=?');
-    const ensure_created = db.prepare('INSERT or IGNORE into health (USER) VALUES (?)');
-    const do_set = db.prepare('UPDATE health SET HEALTH = ? WHERE USER = ?');
-    const do_set_superficial = db.prepare('UPDATE health SET SUPERFICIAL = ? WHERE USER = ?');
-    const do_set_aggravated = db.prepare('UPDATE health SET AGGRAVATED = ? WHERE USER = ?');
+    const do_get = db.prepare('SELECT health, h_superficial, h_aggravated FROM character WHERE player=?');
+    const do_set = db.prepare('UPDATE character SET health=? WHERE player=?');
+    const do_set_superficial = db.prepare('UPDATE character SET h_superficial=? WHERE player=?');
+    const do_set_aggravated = db.prepare('UPDATE character SET h_aggravated=? WHERE player=?');
 
     class Health{
         constructor(row){

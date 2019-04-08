@@ -1,7 +1,5 @@
 const database = require('../database/database.js');
 
-
-
 module.exports = function health(msg, args){
     var is_gm = msg.member.roles.some(r=>["GM"].includes(r.name));
     

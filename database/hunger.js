@@ -1,11 +1,8 @@
 module.exports = function(db){
-    // Create the table if it doesn't exist
-    const create = db.prepare('CREATE TABLE IF NOT EXISTS hunger (USER text UNIQUE NOT NULL, HUNGER INTEGER)');
-    create.run()
 
     // Prepare the queries
-    const do_get = db.prepare('SELECT HUNGER from hunger where USER=?');
-    const do_set = db.prepare('REPLACE into hunger (USER,HUNGER) VALUES (?,?)');
+    const do_get = db.prepare('SELECT hunger FROM character WHERE player=?');
+    const do_set = db.prepare('UPDATE character SET hunger=? WHERE player=?');
 
     // Helper to get
     function get(user){
@@ -13,14 +10,14 @@ module.exports = function(db){
         var rows = do_get.get(who)
         if(rows === undefined)
             return rows
-        return rows['HUNGER'];
+        return rows['hunger'];
     }
 
     // Helper to set
     function set(user, value){
         var who = String(user)
         var amount = Number(value)
-        var ret = do_set.run(who, amount)
+        var ret = do_set.run(amount, who)
         return amount
     }
 
