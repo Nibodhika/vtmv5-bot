@@ -8,47 +8,48 @@ module.exports = function(db){
         'manipulation':['man'],
         'composure':['com'],
         'intelligence':['int'],
-        'wits':[],
+        'wits':['wit'],
         'resolve':['res']        
     }
 
 
 
-    const SKILLS = [
-        'athletics',
-        'brawl',
-        'craft',
-        'drive',
-        'firearms',
-        'melee',
-        'larceny',
-        'stealth',
-        'survival',
-        'animal_ken',
-        'etiquette',
-        'insight',
-        'intimidation',
-        'leadership',
-        'performance',
-        'persuasion',
-        'streetwise',
-        'subterfuge',
-        'academics',
-        'awareness',
-        'finance',
-        'investigation',
-        'medicine',
-        'occult',
-        'politics',
-        'science',
-        'technology',
-    ]
+    const SKILLS = {
+        'athletics':['ath'],
+        'brawl':['bra'],
+        'craft':['cra'],
+        'drive':['dri'],
+        'firearms':['fir'],
+        'melee':['mel'],
+        'larceny':['lar'],
+        'stealth':['ste'],
+        'survival':['sur'],
+        'animal_ken':['ani'],
+        'etiquette':['eti'],
+        'insight':['ins'],
+        'intimidation':['inti'],
+        'leadership':['lea', 'lead'],
+        'performance':['perf'],
+        'persuasion':['pers'],
+        'streetwise':['stre', 'street'],
+        'subterfuge':['sub'],
+        'academics':['aca'],
+        'awareness':['awa'],
+        'finance':['fin'],
+        'investigation':['inv'],
+        'medicine':['med'],
+        'occult':['occ'],
+        'politics':['pol'],
+        'science':['sci'],
+        'technology':['tec', 'tech']
+    }
 
     var CREATE = `
 CREATE TABLE IF NOT EXISTS character(
 -- General
 name TEXT UNIQUE NOT NULL,
 player TEXT UNIQUE,
+concept TEXT,
 predator TEXT,
 sire TEXT,
 clan TEXT,
@@ -61,8 +62,7 @@ generation INTEGER,
         CREATE += `${attr} INTEGER DEFAULT 0 CHECK( ${attr} >= 0 AND ${attr} <= 5),\n`
     }
     CREATE += '\n-- Skills\n'
-    for(var i = 0; i < SKILLS.length; i++){
-        var skill = SKILLS[i];
+    for(var skill in SKILLS){
         CREATE += `${skill} INTEGER DEFAULT 0 CHECK( ${skill} >= 0 AND ${skill} <= 5),\n`
     }
 
@@ -86,20 +86,18 @@ stains INTEGER DEFAULT 0)`
     create_character_table.run()
 
 
-    var SAVE = 'REPLACE INTO character(name, player, predator, sire, clan, generation, '
+    var SAVE = 'REPLACE INTO character(name, player, concept, predator, sire, clan, generation, '
     for(var attr in ATTRIBUTES){
         SAVE += `${attr}, `
     }
-    for(var i = 0; i < SKILLS.length; i++){
-        var skill = SKILLS[i];
+    for(var skill in SKILLS){
         SAVE += `${skill}, `
     }
-    SAVE += ' hunger, health, h_superficial, h_aggravated, willpower, w_superficial, w_aggravated, humanity, stains) VALUES(@name, @player, @predator, @sire, @clan, @generation, '
+    SAVE += ' hunger, health, h_superficial, h_aggravated, willpower, w_superficial, w_aggravated, humanity, stains) VALUES(@name, @player, @concept, @predator, @sire, @clan, @generation, '
     for(var attr in ATTRIBUTES){
         SAVE += `@${attr}, `
     }
-    for(var i = 0; i < SKILLS.length; i++){
-        var skill = SKILLS[i];
+    for(var skill in SKILLS){
         SAVE += `@${skill}, `
     }
     SAVE += ' @hunger, @health, @h_superficial, @h_aggravated, @willpower, @w_superficial, @w_aggravated, @humanity, @stains)'
@@ -131,28 +129,28 @@ stains INTEGER DEFAULT 0)`
             this.sheet = {
                 name: name,
                 player: player,
+                concept: '',
                 predator: '',
                 sire: '',
                 clan: '',
-                generation: 13, //
+                generation: 13,
 
 
                 hunger: 1,
-                health: 0, //
+                health: 4,
                 h_superficial: 0,
                 h_aggravated: 0,
-                willpower: 1, //
+                willpower: 2,
                 w_superficial: 0,
                 w_aggravated: 0,
-                humanity: 7, //
+                humanity: 7,
                 stains: 0,
             }
 
             for(var attr in ATTRIBUTES){
                 this.sheet[attr] = 1;
             }
-            for(var i = 0; i < SKILLS.length; i++){
-                var skill = SKILLS[i];
+            for(var skill in SKILLS){
                 this.sheet[skill] = 0;
             }
             
@@ -177,7 +175,10 @@ stains INTEGER DEFAULT 0)`
                     if(ATTRIBUTES[attr].indexOf(what) > -1)
                         return attr
                 }
-                // TODO same for skills
+                for(var skill in SKILLS) {
+                    if(SKILLS[skill].indexOf(what) > -1)
+                        return skill
+                }
                 return undefined
             }
             return what
@@ -199,6 +200,17 @@ stains INTEGER DEFAULT 0)`
                 return value+" is not a number";
 
             this.sheet[what] = value;
+
+            //Stamina influences health
+            if(what == 'stamina'){
+                this.sheet.health = value + 3;
+            }
+            // willpower = composure + resolve
+            else if(['composure', 'resolve'].indexOf(what) > -1){
+                this.sheet.willpower = this.sheet.composure + this.sheet.resolve;
+            }
+            
+            
             this.save()
             return `${this.sheet.name} now has ${value} ${what}`
         }
@@ -226,25 +238,31 @@ stains INTEGER DEFAULT 0)`
         }
         
         get_skills() {
-            var physical_n = SKILLS.length / 3;
+            var physical_n = Object.keys(SKILLS).length / 3;
             var social_n = physical_n * 2;
             var out = {
                 physical: {},
                 social: {},
                 mental: {}
             }
-            for(var i = 0; i < SKILLS.length; i++){
-                var skill = SKILLS[i]
+            var i = 0;
+            for(var skill in SKILLS) {
                 if(i < physical_n)
                     out.physical[skill] = this.sheet[skill]
                 else if(i < social_n)
                     out.social[skill] = this.sheet[skill]
                 else
                     out.mental[skill] = this.sheet[skill]
+                i++;
             }
             return out;
         }
-    }
 
+        get_health() {
+            var current_health = this.sheet.health - this.sheet.h_aggravated - this.sheet.h_superficial;
+            return `${current_health}/${this.sheet.health} ${this.sheet.h_aggravated}|${this.sheet.h_superficial}`
+        }
+    }
+    
     return Character
 }

@@ -6,10 +6,13 @@ const roll_cmd = require('./cmd/roll.js');
 const hunger_cmd = require('./cmd/hunger.js');
 const health_cmd = require('./cmd/health.js');
 const character_cmd = require('./cmd/character.js');
+const creating_cmd = require('./cmd/creating.js');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
+
+var creating_step = -1
 
 client.on('message', msg => {
 
@@ -29,9 +32,8 @@ client.on('message', msg => {
 !hunger <who>
     Check the hunger of a player
 `
-        if(cmd === 'help'){
+        if(cmd === 'help')
             msg.reply('\n'+help_str);
-        }
         else if(cmd === 'roll')
             roll_cmd(msg, args);
         else if(cmd === 'hunger')
@@ -39,11 +41,24 @@ client.on('message', msg => {
         else if(cmd === 'health')
             health_cmd(msg, args);
         else if(cmd === 'character')
-            character_cmd(msg, args);
+            character_cmd(msg, args)
+        else if(cmd === 'create'){
+            console.log("Received a create command")
+            creating_step = 0
+            creating_step = creating_cmd(msg,creating_step)
+        }
         else{
             msg.reply("\nUnknown command, " + help_str);
         }
     }
+    else if(msg.channel.name === undefined && ! msg.author.bot) {
+        console.log(msg.content + " sent with " + creating_step)
+        var a = creating_cmd(msg,creating_step)
+        console.log("creating called with " + creating_step + " returned " + a)
+        creating_step = a
+        console.log("After msg step is " + creating_step)
+    }
+
 });
 
 
