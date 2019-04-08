@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-const database = require('./database.js');
-const roll = require('./roll.js');
-
-var admin = '<@295376593273225217>';
+// commands
+const roll_cmd = require('./cmd/roll.js');
+const hunger_cmd = require('./cmd/hunger.js');
+const health_cmd = require('./cmd/health.js');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -31,62 +31,12 @@ client.on('message', msg => {
         if(cmd === 'help'){
             msg.reply('\n'+help_str);
         }
-        else if(cmd === 'roll') {
-            var amount = 1;
-            var difficulty = 1;
-            var hunger = 0;
-            if(args.length > 1)
-                amount = args[1];
-            if(args.length > 2)
-                difficulty = args[2];
-            if(args.length > 3)
-                hunger = args[3];
-            msg.reply(roll(amount, difficulty, hunger));
-        }
-        else if(cmd === 'hunger') {
-            var who = msg.author;
-            if(args.length > 1)
-                who = args[1];
-            console.log("who is " + who)
-
-            if(args.length <=2){
-                var hunger = database.get_hunger(who);
-                var reply = ''
-                if(hunger == undefined)
-                    reply = "No hunger information for " + who;
-                else
-                    reply = who + " is at " + hunger + " Hunger";
-
-                msg.channel.send(reply);
-            }
-            else{
-                if(msg.author != admin){
-                    msg.reply("You can't do that");
-                }
-                else{
-                    var option = args[2];
-                    var amount = 1;
-                    if(args.length > 3)
-                        amount = Number(args[3])
-                    var changed = true;
-                    var current_hunger = undefined
-                    if(option === 'i')
-                        current_hunger = database.increase_hunger(who, amount);
-                    else if(option === 'd')
-                        current_hunger = database.decrease_hunger(who, amount);
-                    else if(option === 's')
-                        current_hunger = database.set_hunger(who, amount);
-                    else{
-                        msg.reply("Unknown option " + option);
-                    }
-                    console.log("Current hunger is " + current_hunger)
-
-                    if(current_hunger != undefined){
-                        msg.channel.send(who + " is now at " + current_hunger + " Hunger");                    
-                    }
-                }
-            }
-        }
+        else if(cmd === 'roll')
+            roll_cmd(msg, args);
+        else if(cmd === 'hunger')
+            hunger_cmd(msg, args);
+        else if(cmd === 'health')
+            health_cmd(msg, args);
         else{
             msg.reply("\nUnknown command, " + help_str);
         }
