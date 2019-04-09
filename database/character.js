@@ -169,23 +169,29 @@ stains INTEGER DEFAULT 0)`
         }
 
 
-        unalias_attr(what){
+        unalias_attr(what, accept_attributes=true,accept_skills=true){
             if(! (what in this.sheet) ){
-                for(var attr in ATTRIBUTES){
-                    if(ATTRIBUTES[attr].indexOf(what) > -1)
-                        return attr
+                if(accept_attributes){
+                    console.log("Checcking attributes for " + what)
+                    for(var attr in ATTRIBUTES){
+                        if(ATTRIBUTES[attr].indexOf(what) > -1)
+                            return attr
+                    }                    
                 }
-                for(var skill in SKILLS) {
-                    if(SKILLS[skill].indexOf(what) > -1)
-                        return skill
+                if(accept_skills){
+                    console.log("Checcking skills for " + what)
+                    for(var skill in SKILLS) {
+                        if(SKILLS[skill].indexOf(what) > -1)
+                            return skill
+                    }                    
                 }
                 return undefined
             }
             return what
         }
 
-        get(what){
-            what = this.unalias_attr(what)
+        get(what, accept_attributes=true, accept_skills=true){
+            what = this.unalias_attr(what,accept_attributes,accept_skills)
             if(what === undefined)
                 return undefined
             return this.sheet[what]

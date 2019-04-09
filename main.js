@@ -44,8 +44,7 @@ client.on('message', msg => {
             character_cmd(msg, args)
         else if(cmd === 'create'){
             console.log("Received a create command")
-            creating_step = 0
-            creating_step = creating_cmd(msg,creating_step)
+            creating_step = creating_cmd(msg,0)
         }
         else{
             msg.reply("\nUnknown command, " + help_str);
@@ -53,9 +52,7 @@ client.on('message', msg => {
     }
     else if(msg.channel.name === undefined && ! msg.author.bot) {
         console.log(msg.content + " sent with " + creating_step)
-        var a = creating_cmd(msg,creating_step)
-        console.log("creating called with " + creating_step + " returned " + a)
-        creating_step = a
+        creating_step = creating_cmd(msg,creating_step)
         console.log("After msg step is " + creating_step)
     }
 
