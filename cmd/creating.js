@@ -242,9 +242,12 @@ function CLAN(msg){
     return step.CLAN
 }
 
-function set_attributes(msg, amount, value, current_step, next_step, next_message) {
-    console.log("called set_attribute with "+msg.content)
+function set_attributes_skills(msg, amount, value, current_step, next_step, next_message, attribute) {
+    console.log("called set_attributes_skills with "+msg.content)
     console.log(`amount ${amount}, value ${value} ${current_step}->${next_step}`)
+    var name = 'attribute'
+    if(!attribute)
+        name = 'skill'
     // 3 attributes
     var character = database.Character.find(msg.author);
     var attr_list = [msg.content.toLowerCase()]
@@ -256,9 +259,9 @@ function set_attributes(msg, amount, value, current_step, next_step, next_messag
     }
     for(var i=0; i<attr_list.length; i++){
         var what = attr_list[i];
-        var meant = character.get(what,true,false);
+        var meant = character.get(what,attribute,!attribute);
         if(meant == undefined) {
-            msg.reply(`${what} is not a valid attribute`)
+            msg.reply(`${what} is not a valid ${name}`)
             return current_step
         }
         character.sheet[meant] = value;
@@ -270,23 +273,25 @@ function set_attributes(msg, amount, value, current_step, next_step, next_messag
 }
 
 function ATTRIBUTE_4(msg){
-    return set_attributes(
+    return set_attributes_skills(
         msg,
         1,
         4,
         step.ATTRIBUTE_4,
         step.ATTRIBUTE_3,
-        'Now select 3 attributes separated by coma to have 3 dots, e.g. "strength,stamina,resolve"'
+        'Now select 3 attributes separated by coma to have 3 dots, e.g. "strength,stamina,resolve"',
+        true
     )
 }
 function ATTRIBUTE_3(msg){
-    return set_attributes(
+    return set_attributes_skills(
         msg,
         3,
         3,
         step.ATTRIBUTE_3,
         step.ATTRIBUTE_2,
-        'Now select 4 attributes separated by coma to have 2 dots, e.g. "dexterity,charisma,composure,wits"'
+        'Now select 4 attributes separated by coma to have 2 dots, e.g. "dexterity,charisma,composure,wits"',
+        true
     );
 }
 function ATTRIBUTE_2(msg){
@@ -294,19 +299,33 @@ function ATTRIBUTE_2(msg){
     for(var i = 0; i < skill_distributions.length; i++){
         reply += '- ' + skill_distributions[i] + '\n'
     }
-    return set_attributes(
+    return set_attributes_skills(
         msg,
         4,
         2,
         step.ATTRIBUTE_2,
         step.SKILL_DISTRIBUTION,
-        reply
+        reply,
+        true
     );
 }
 function SKILL_DISTRIBUTION(msg){
     var selected = msg.content.toLowerCase()
-    if(skill_distribution.indexOf(selected) > -1){
-        msg.reply("selected " + selected);
+    if(skill_distributions.indexOf(selected) > -1){
+        if(selected == 'jack of all trades'){
+            msg.reply('Now select 1 skills separated by coma to have 3 dots, e.g. "athletics,brawl,craft,etc..."');
+            return step.JACK_3;
+        }
+        else if(selected == 'balanced'){
+            msg.reply('Now select 3 skills separated by coma to have 3 dots, e.g. "athletics,brawl,craft"');
+            return step.BALANCED_3;
+        }
+        else if(selected == 'specialist'){
+            msg.reply('Now select 1 skills separated by coma to have 4 dots, e.g. "technology"');
+            return step.SPECIALIST_4;
+        }
+     
+        msg.reply("Please report that "+selected+" is not valid");
         return step.BEFORE;
     }
     msg.reply(msg.content + " is not a valid skill distribution, please select one from the list above");
@@ -315,13 +334,42 @@ function SKILL_DISTRIBUTION(msg){
 
 
 function JACK_3(msg){
-    
+    // 1 skill at 3
+    return set_attributes_skills(
+        msg,
+        1,
+        3,
+        step.JACK_3,
+        step.JACK_2,
+        'Now select 8 skills separated by coma to have 2 dots, e.g. "athletics,brawl,craft,etc..."',
+        false
+    );
 }
 function JACK_2(msg){
-    
+    // 8 at 2
+    return set_attributes_skills(
+        msg,
+        8,
+        2,
+        step.JACK_2,
+        step.JACK_1,
+        'Now select 10 skills separated by coma to have 1 dots, e.g. "athletics,brawl,craft,etc..."',
+        false
+    );
 }
+
+
 function JACK_1(msg){
-    
+    // 10 at 1
+    return set_attributes_skills(
+        msg,
+        10,
+        1,
+        step.JACK_1,
+        step.DISCIPLINES,
+        'Now select one discipline to have 2 dots', // This should be a function that checks the clan, if thin_blood skip it
+        false
+    );    
 }
 
 
