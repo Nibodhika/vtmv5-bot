@@ -137,6 +137,7 @@ function print_sheet(character) {
     return {
         embed: {
             title: character.sheet.name,
+            description: character.sheet.concept,
             fields: fields
     }}
 }

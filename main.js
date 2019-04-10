@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 // commands
+const help_cmd = require('./cmd/help.js').help_cmd;
 const roll_cmd = require('./cmd/roll.js');
 const hunger_cmd = require('./cmd/hunger.js');
 const health_cmd = require('./cmd/health.js');
@@ -24,16 +25,8 @@ client.on('message', msg => {
         var cmd = args[0].toLowerCase();
 
         // Help string
-        var help_str = `Valid commands are:
-!help
-    Prints this help
-!roll <amount> <difficulty> <hunger>
-    Rolls <amount> of dice
-!hunger <who>
-    Check the hunger of a player
-`
         if(cmd === 'help')
-            msg.reply('\n'+help_str);
+            help_cmd(msg, args)
         else if(cmd === 'roll')
             roll_cmd(msg, args);
         else if(cmd === 'hunger')
