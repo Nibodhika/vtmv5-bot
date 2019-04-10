@@ -197,5 +197,6 @@ function help_cmd(msg, args){
 }
 
 module.exports.clans = clans
+module.exports.disciplines = disciplines
 module.exports.predator_type = predator_type
 module.exports.help_cmd = help_cmd

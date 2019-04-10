@@ -23,17 +23,17 @@ const step = {
 
     BALANCED_3:13, // 3 skills at 3
     BALANCED_2:14, // 5 skills at 2
-    BALANCED_1:14, // 7 skills at 1
+    BALANCED_1:15, // 7 skills at 1
 
-    SPECIALIST_4:15, // 1 skill at 4
-    SPECIALIST_3:16, // 3 skills at 3
-    SPECIALIST_2:17, // 3 skills at 2
-    SPECIALIST_1:18, // 3 skills at 1
+    SPECIALIST_4:16, // 1 skill at 4
+    SPECIALIST_3:17, // 3 skills at 3
+    SPECIALIST_2:18, // 3 skills at 2
+    SPECIALIST_1:19, // 3 skills at 1
 
-    DISCIPLINES_2:19,
-    DISCIPLINES_1:20,
+    DISCIPLINES_2:20,
+    DISCIPLINES_1:21,
 
-    PREDATOR:21,
+    PREDATOR:22,
 
     FINISH:99,
 }
@@ -232,7 +232,7 @@ function JACK_2(msg){
 
 function step_after_skills(character){
     var reply = ''
-    var next_step = step.DISCIPLINES
+    var next_step = step.DISCIPLINES_2
     if(character.sheet.clan == 'thin_blood'){
         reply = "Thin blood characters don't have disciplines available at character creation, so now tell me your predator type from the list below:\n"
         for(var type in help.predator_type){
@@ -240,12 +240,11 @@ function step_after_skills(character){
         }
         next_step = step.PREDATOR
     }    
-    else if(character.clan == 'caitiff'){
+    else if(character.sheet.clan == 'caitiff'){
         var reply = 'Caitiff characters have no intrinsic disciplines, instead they can choose any two disciplines when creating a character, but they cost more xp to evolve later:\n'
-        for(var i in help.disciplines){
-            var discipline = help.disciplines[i]
+        for(var discipline in help.disciplines){
             if(discipline != 'thin-blood alchemy')
-                reply += '- ' +  + '\n'
+                reply += '- ' + discipline + '\n'
         }
             
     }
@@ -370,9 +369,13 @@ function SPECIALIST_1(msg){
     );
 }
 
-function DISCIPLINES(msg){
-    
+function DISCIPLINES_2(msg){
+    var character = database.Character.find(msg.author);
 }
+function DISCIPLINES_1(msg){
+    var character = database.Character.find(msg.author);
+}
+
 
 function PREDATOR(msg){
     
@@ -383,9 +386,25 @@ function FINISH(msg){
     return step.BEFORE;
 }
 
-module.exports = function creating_cmd(msg, current_step){
+module.exports = function creating_cmd(msg, begin_creation){
+    var who = msg.author;
+    var current_step = -1;
+    if(begin_creation){
+        database.creation.set_step(who,0)
+        current_step = 0;
+    }
+    else{
+        current_step = database.creation.get_step(who)        
+    }
+
+    current_step = do_create(msg, current_step)
+    console.log("Moving to "+current_step)
+    database.creation.set_step(who, current_step)
+}
+
+function do_create(msg, current_step) {
     console.log("Received a create with step " + current_step)
-    console.log("is current step DELETE? " + current_step == step)
+    
     switch(current_step){
     case step.WELCOME:
     case undefined:
@@ -435,8 +454,11 @@ module.exports = function creating_cmd(msg, current_step){
     case step.SPECIALIST_1:
         return SPECIALIST_1(msg);
 
-    case step.DISCIPLINES:
-        return DISCIPLINES(msg);
+    case step.DISCIPLINES_2:
+        return DISCIPLINES_2(msg);
+    case step.DISCIPLINES_1:
+        return DISCIPLINES_1(msg);
+        
     case step.PREDATOR:
         return PREDATOR(msg);
 

@@ -13,8 +13,6 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-var creating_step = -1
-
 client.on('message', msg => {
 
     if (msg.content[0] === '!') {
@@ -36,17 +34,14 @@ client.on('message', msg => {
         else if(cmd === 'character')
             character_cmd(msg, args)
         else if(cmd === 'create'){
-            console.log("Received a create command")
-            creating_step = creating_cmd(msg,0)
+            creating_cmd(msg, true);
         }
         else{
             msg.reply("\nUnknown command, " + help_str);
         }
     }
     else if(msg.channel.name === undefined && ! msg.author.bot) {
-        console.log(msg.content + " sent with " + creating_step)
-        creating_step = creating_cmd(msg,creating_step)
-        console.log("After msg step is " + creating_step)
+        creating_cmd(msg, false);
     }
 
 });

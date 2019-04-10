@@ -24,7 +24,7 @@ module.exports = function(db){
         'larceny':['lar'],
         'stealth':['ste'],
         'survival':['sur'],
-        'animal_ken':['ani'],
+        'animal_ken':['ani', 'animal'],
         'etiquette':['eti'],
         'insight':['ins'],
         'intimidation':['inti'],

@@ -11,11 +11,11 @@ const db = new Database('vtmv5.db');//, {verbose: console.log});
 
 
 const Character = require('./character.js')(db)
-
 const hunger = require('./hunger.js')(db)
 const health = require('./health.js')(db)
-
+const creation = require('./creation.js')(db)
 
 module.exports.hunger = hunger
 module.exports.health = health
+module.exports.creation = creation
 module.exports.Character = Character
