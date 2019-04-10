@@ -12,8 +12,6 @@ module.exports = function(db){
         'resolve':['res']        
     }
 
-
-
     const SKILLS = {
         'athletics':['ath'],
         'brawl':['bra'],

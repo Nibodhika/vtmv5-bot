@@ -241,7 +241,7 @@ function step_after_skills(character){
         next_step = step.PREDATOR
     }    
     else if(character.sheet.clan == 'caitiff'){
-        var reply = 'Caitiff characters have no intrinsic disciplines, instead they can choose any two disciplines when creating a character, but they cost more xp to evolve later:\n'
+        var reply = 'Caitiff characters have no intrinsic disciplines, instead they can choose any two disciplines when creating a character, but they cost more xp to evolve later, select one to have 2 dots:\n'
         for(var discipline in help.disciplines){
             if(discipline != 'thin-blood alchemy')
                 reply += '- ' + discipline + '\n'
@@ -371,14 +371,22 @@ function SPECIALIST_1(msg){
 
 function DISCIPLINES_2(msg){
     var character = database.Character.find(msg.author);
+    var clan = character.sheet.clan
+    var available_disciplines = Object.keys(help.clans[clan].disciplines)
+    var discipline = msg.content.toLowerCase()
+    if(available.disciplines.indexOf(discipline) > -1){
+        character.sheet
+        return step.DISCIPLINES_1
+    }
 }
 function DISCIPLINES_1(msg){
     var character = database.Character.find(msg.author);
+    return step.PREDATOR
 }
 
 
 function PREDATOR(msg){
-    
+    return FINISH(msg)
 }
 
 function FINISH(msg){

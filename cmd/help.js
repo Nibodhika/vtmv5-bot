@@ -49,17 +49,17 @@ ficulty 4 or more) your character can sense if a mortal possesses the blood they
 }
 
 const disciplines = {
-    'animalism': "Supernatural affinity with and control of animals",
-    'auspex': "Extrasensory perception, awareness, and premonitions",
-    'blood sorcery': "The use of the Blood to perform magic",
-    'celerity': "Supernatural quickness and reflexes",
-    'dominate': "Mind control practiced through one’s piercing gaze",
-    'fortitude': "Unearthly toughness, even to the point of resisting fire and sunlight",
-    'obfuscate': "The ability to remain obscure and unseen, even in crowds",
-    'potence': "The Discipline of physical vigor andstrength",
-    'presence': "The ability to attract, sway, and controlemotions",
-    'protean': "Shape-changing, from growing claws to melding with the earth",
-    'thin-blood alchemy': "Mixing blood, emotion,and other ingredients to create powerful effects"
+    animalism: "Supernatural affinity with and control of animals",
+    auspex: "Extrasensory perception, awareness, and premonitions",
+    blood_sorcery: "The use of the Blood to perform magic",
+    celerity: "Supernatural quickness and reflexes",
+    dominate: "Mind control practiced through one’s piercing gaze",
+    fortitude: "Unearthly toughness, even to the point of resisting fire and sunlight",
+    obfuscate: "The ability to remain obscure and unseen, even in crowds",
+    potence: "The Discipline of physical vigor andstrength",
+    presence: "The ability to attract, sway, and controlemotions",
+    protean: "Shape-changing, from growing claws to melding with the earth",
+    thin_blood_alchemy: "Mixing blood, emotion,and other ingredients to create powerful effects"
 }
 
 const predator_type = {
