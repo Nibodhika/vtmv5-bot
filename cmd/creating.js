@@ -1,6 +1,6 @@
 const database = require('../database/database.js');
 var helper = require('./character_base.js');
-var help = require('./help.js')
+var rules = require('../rules.js')
 
 const step = {
     BEFORE: -1,
@@ -88,7 +88,7 @@ function CONCEPT(msg){
     character.sheet.concept = msg.content;
     character.save();
     var reply = 'Now select a clan from the available options, you can type !help <clan name> for more information on the clan:\n'
-    for(var clan in help.clans){
+    for(var clan in rules.clans){
         reply += '- ' + clan + '\n'
     }
     msg.reply(reply);
@@ -97,7 +97,7 @@ function CONCEPT(msg){
 
 function CLAN(msg){
     var selected_clan = msg.content.toLowerCase()
-    if(Object.keys(help.clans).indexOf(selected_clan) > -1){
+    if(Object.keys(rules.clans).indexOf(selected_clan) > -1){
         var character = database.Character.find(msg.author);
         character.sheet.clan = selected_clan;
         character.save();
@@ -235,23 +235,23 @@ function step_after_skills(character){
     var next_step = step.DISCIPLINES_2
     if(character.sheet.clan == 'thin_blood'){
         reply = "Thin blood characters don't have disciplines available at character creation, so now tell me your predator type from the list below:\n"
-        for(var type in help.predator_type){
+        for(var type in rules.predator_type){
             reply += '- ' + type + '\n';
         }
         next_step = step.PREDATOR
     }    
     else if(character.sheet.clan == 'caitiff'){
         var reply = 'Caitiff characters have no intrinsic disciplines, instead they can choose any two disciplines when creating a character, but they cost more xp to evolve later, select one to have 2 dots:\n'
-        for(var discipline in help.disciplines){
-            if(discipline != 'thin-blood alchemy')
+        for(var discipline in rules.disciplines){
+            if(discipline != 'thin_blood_alchemy')
                 reply += '- ' + discipline + '\n'
         }
             
     }
     else{
         var reply = 'Now select one discipline to have 2 dots from the list below:\n'
-        for(var i in help.clans[character.sheet.clan].disciplines)
-            reply += '- ' + help.clans[character.sheet.clan].disciplines[i] + '\n'
+        for(var i in rules.clans[character.sheet.clan].disciplines)
+            reply += '- ' + rules.clans[character.sheet.clan].disciplines[i] + '\n'
     }
     return [
         next_step,
@@ -372,7 +372,7 @@ function SPECIALIST_1(msg){
 function DISCIPLINES_2(msg){
     var character = database.Character.find(msg.author);
     var clan = character.sheet.clan
-    var available_disciplines = Object.keys(help.clans[clan].disciplines)
+    var available_disciplines = Object.keys(rules.clans[clan].disciplines)
     var discipline = msg.content.toLowerCase()
     if(available.disciplines.indexOf(discipline) > -1){
         character.sheet
