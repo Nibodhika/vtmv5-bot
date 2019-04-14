@@ -1,4 +1,4 @@
-module.exports.predator_type = {
+module.exports = {
     alleycat:{
         description:'You take blood by force or threat.',
         characteristics:[

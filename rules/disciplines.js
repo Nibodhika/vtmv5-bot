@@ -1,4 +1,4 @@
-module.exports.disciplines = {
+module.exports = {
     animalism: {
         description: "Supernatural affinity with and control of animals",
         powers:{

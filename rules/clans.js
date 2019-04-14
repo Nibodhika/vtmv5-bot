@@ -1,4 +1,4 @@
-module.exports.clans = {
+module.exports = {
     brujah:{
         description: ' The Rabble rebel against power and rage against tyranny.',
         disciplines: ['celerity', 'potence', 'presence'],
