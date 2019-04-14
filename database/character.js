@@ -1,46 +1,6 @@
+var rules = require('../rules/rules.js')
+
 module.exports = function(db){
-
-    const ATTRIBUTES = {
-        'strength':['str'],
-        'dexterity':['dex'],
-        'stamina':['sta'],
-        'charisma':['cha'],
-        'manipulation':['man'],
-        'composure':['com'],
-        'intelligence':['int'],
-        'wits':['wit'],
-        'resolve':['res']        
-    }
-
-    const SKILLS = {
-        'athletics':['ath'],
-        'brawl':['bra'],
-        'craft':['cra'],
-        'drive':['dri'],
-        'firearms':['fir'],
-        'melee':['mel'],
-        'larceny':['lar'],
-        'stealth':['ste'],
-        'survival':['sur'],
-        'animal_ken':['ani', 'animal'],
-        'etiquette':['eti'],
-        'insight':['ins'],
-        'intimidation':['inti'],
-        'leadership':['lea', 'lead'],
-        'performance':['perf'],
-        'persuasion':['pers'],
-        'streetwise':['stre', 'street'],
-        'subterfuge':['sub'],
-        'academics':['aca'],
-        'awareness':['awa'],
-        'finance':['fin'],
-        'investigation':['inv'],
-        'medicine':['med'],
-        'occult':['occ'],
-        'politics':['pol'],
-        'science':['sci'],
-        'technology':['tec', 'tech']
-    }
 
     var CREATE = `
 CREATE TABLE IF NOT EXISTS character(
@@ -56,11 +16,15 @@ generation INTEGER,
 `
 
     CREATE += '-- Attributes\n'
-    for(var attr in ATTRIBUTES){
+    for(var attr in rules.attributes){
         CREATE += `${attr} INTEGER DEFAULT 0 CHECK( ${attr} >= 0 AND ${attr} <= 5),\n`
     }
     CREATE += '\n-- Skills\n'
-    for(var skill in SKILLS){
+    for(var skill in rules.skills){
+        CREATE += `${skill} INTEGER DEFAULT 0 CHECK( ${skill} >= 0 AND ${skill} <= 5),\n`
+    }
+    CREATE += '\n-- Disciplines\n'
+    for(var skill in rules.disciplines){
         CREATE += `${skill} INTEGER DEFAULT 0 CHECK( ${skill} >= 0 AND ${skill} <= 5),\n`
     }
 
@@ -85,17 +49,17 @@ stains INTEGER DEFAULT 0)`
 
 
     var SAVE = 'REPLACE INTO character(name, player, concept, predator, sire, clan, generation, '
-    for(var attr in ATTRIBUTES){
+    for(var attr in rules.attributes){
         SAVE += `${attr}, `
     }
-    for(var skill in SKILLS){
+    for(var skill in rules.skills){
         SAVE += `${skill}, `
     }
     SAVE += ' hunger, health, h_superficial, h_aggravated, willpower, w_superficial, w_aggravated, humanity, stains) VALUES(@name, @player, @concept, @predator, @sire, @clan, @generation, '
-    for(var attr in ATTRIBUTES){
+    for(var attr in rules.attributes){
         SAVE += `@${attr}, `
     }
-    for(var skill in SKILLS){
+    for(var skill in rules.skills){
         SAVE += `@${skill}, `
     }
     SAVE += ' @hunger, @health, @h_superficial, @h_aggravated, @willpower, @w_superficial, @w_aggravated, @humanity, @stains)'
@@ -145,10 +109,10 @@ stains INTEGER DEFAULT 0)`
                 stains: 0,
             }
 
-            for(var attr in ATTRIBUTES){
+            for(var attr in rules.attributes){
                 this.sheet[attr] = 1;
             }
-            for(var skill in SKILLS){
+            for(var skill in rules.skills){
                 this.sheet[skill] = 0;
             }
             
@@ -171,15 +135,15 @@ stains INTEGER DEFAULT 0)`
             if(! (what in this.sheet) ){
                 if(accept_attributes){
                     console.log("Checcking attributes for " + what)
-                    for(var attr in ATTRIBUTES){
-                        if(ATTRIBUTES[attr].indexOf(what) > -1)
+                    for(var attr in rules.attributes){
+                        if(rules.attributes[attr].alias.indexOf(what) > -1)
                             return attr
                     }                    
                 }
                 if(accept_skills){
                     console.log("Checcking skills for " + what)
-                    for(var skill in SKILLS) {
-                        if(SKILLS[skill].indexOf(what) > -1)
+                    for(var skill in rules.skills) {
+                        if(rules.skills[skill].indexOf(what) > -1)
                             return skill
                     }                    
                 }
@@ -220,7 +184,7 @@ stains INTEGER DEFAULT 0)`
         }
         
         get_attributes() {
-            var physical_n = Object.keys(ATTRIBUTES).length / 3;
+            var physical_n = Object.keys(rules.attributes).length / 3;
             var social_n = physical_n * 2;
             var out = {
                 physical: {},
@@ -229,7 +193,7 @@ stains INTEGER DEFAULT 0)`
             }
 
             var i = 0;
-            for(var attr in ATTRIBUTES){
+            for(var attr in rules.attributes){
                 if(i < physical_n)
                     out.physical[attr] = this.sheet[attr]
                 else if(i < social_n)
@@ -242,7 +206,7 @@ stains INTEGER DEFAULT 0)`
         }
         
         get_skills() {
-            var physical_n = Object.keys(SKILLS).length / 3;
+            var physical_n = Object.keys(rules.skills).length / 3;
             var social_n = physical_n * 2;
             var out = {
                 physical: {},
@@ -250,7 +214,7 @@ stains INTEGER DEFAULT 0)`
                 mental: {}
             }
             var i = 0;
-            for(var skill in SKILLS) {
+            for(var skill in rules.skills) {
                 if(i < physical_n)
                     out.physical[skill] = this.sheet[skill]
                 else if(i < social_n)

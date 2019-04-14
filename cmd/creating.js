@@ -1,6 +1,6 @@
 const database = require('../database/database.js');
 var helper = require('./character_base.js');
-var rules = require('../rules.js')
+var rules = require('../rules/rules.js')
 
 const step = {
     BEFORE: -1,

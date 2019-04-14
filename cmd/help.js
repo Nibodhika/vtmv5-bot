@@ -1,4 +1,4 @@
-const rules = require('../rules.js');
+const rules = require('../rules/rules.js');
 
 var help_str = `Valid commands are:
 !help <topic>
@@ -6,7 +6,12 @@ var help_str = `Valid commands are:
 !roll <amount> <difficulty> <hunger>
     Rolls <amount> of dice
 !hunger <who>
-    Check the hunger of a player`
+    Check the hunger of a player
+!character <who>
+    Check the character sheet of a player
+!create
+    Starts the character creation in a DM
+`
 
 function help_cmd(msg, args){
     var reply = help_str
@@ -33,6 +38,16 @@ function help_cmd(msg, args){
         }
         else if(Object.keys(rules.disciplines).indexOf(about) > -1){
             var reply = rules.disciplines[about].description;
+        }
+        else if(Object.keys(rules.attributes).indexOf(about) > -1){
+            var reply = rules.attributes[about].description;
+            reply += `\nYou can also refer to it for rolls and character creation as: ` + rules.attributes[about].alias
+        }
+        else if(Object.keys(rules.skills).indexOf(about) > -1){
+            var reply = rules.skills[about].description;
+        }
+        else{
+            reply = `I don't know about "${about}"`
         }
     }
     msg.reply('\n'+reply);
