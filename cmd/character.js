@@ -1,5 +1,5 @@
-const database = require('../database/database.js');
 var helper = require('./character_base.js');
+const Character = require('../character.js');
 
 module.exports = function character_cmd(msg, args) {
     var who = msg.author;
@@ -9,7 +9,7 @@ module.exports = function character_cmd(msg, args) {
             who = null
     }
 
-    var character = database.Character.find(who);
+    var character = Character.find(who);
     if(args.length <=2){
         if(character === undefined) {
             msg.reply("Could not find a character for " + who);

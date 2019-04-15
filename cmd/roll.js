@@ -1,10 +1,10 @@
-const database = require('../database/database.js');
+const Character = require('../character.js');
 
 module.exports = function roll(msg, args) {
     var who = msg.author;
     var amount = 1;
     var difficulty = 1;
-    var character = database.Character.find(who);
+    var character = Character.find(who);
     var hunger = 0
 
     if(character != undefined)

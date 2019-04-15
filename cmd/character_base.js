@@ -1,7 +1,9 @@
 const database = require('../database/database.js');
+const rules = require('../rules/rules.js');
+const Character = require('../character.js');
 
 function do_create_character(name, player) {
-    var character = new database.Character(name, player);
+    var character = new Character(name, player);
     character.save()
     return character;
 }
@@ -111,6 +113,31 @@ function print_sheet(character) {
         },
     ]
 
+
+    var disciplines_field = [
+        {
+            name: '====================== Disciplines=======================',
+            value: "======================================================"
+        }
+    ]
+    
+    if(character.sheet.clan == 'caitiff'){
+        // TODO
+    }
+    else{
+        var available_disciplines = rules.clans[character.sheet.clan].disciplines
+        for(var i in available_disciplines){
+            var discipline = available_disciplines[i]
+            disciplines_field.push({
+                name: discipline,
+                inline: true,
+                value: `${character.sheet[discipline]}`
+            })
+        }
+        
+    }
+
+
     var status_fields = [
         {
             name: '========================= Status =========================',
@@ -133,7 +160,7 @@ function print_sheet(character) {
         },
     ]
 
-    var fields = general_fields.concat(attribute_fields).concat(skill_fields).concat(status_fields)
+    var fields = general_fields.concat(attribute_fields).concat(skill_fields).concat(disciplines_field).concat(status_fields)
     return {
         embed: {
             title: character.sheet.name,

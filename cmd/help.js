@@ -46,6 +46,9 @@ function help_cmd(msg, args){
         else if(Object.keys(rules.skills).indexOf(about) > -1){
             var reply = rules.skills[about].description;
         }
+        else if(Object.keys(rules.predator_type).indexOf(about) > -1){
+            var reply = rules.predator_type[about].description;
+        }
         else{
             reply = `I don't know about "${about}"`
         }

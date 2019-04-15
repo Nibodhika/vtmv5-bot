@@ -1,6 +1,7 @@
 const database = require('../database/database.js');
 var helper = require('./character_base.js');
 var rules = require('../rules/rules.js')
+var Character = require('../character.js')
 
 const step = {
     BEFORE: -1,
@@ -45,7 +46,7 @@ const skill_distributions = [
 ]
 
 function WELCOME(msg){
-    var character = database.Character.find(msg.author);
+    var character = Character.find(msg.author);
     var reply = ""
     if(character === undefined) {
         msg.author.send("Welcome to the character creation helper");
@@ -84,7 +85,7 @@ function NAME(msg){
 }
 
 function CONCEPT(msg){
-    var character = database.Character.find(msg.author);
+    var character = Character.find(msg.author);
     character.sheet.concept = msg.content;
     character.save();
     var reply = 'Now select a clan from the available options, you can type !help <clan name> for more information on the clan:\n'
@@ -98,7 +99,7 @@ function CONCEPT(msg){
 function CLAN(msg){
     var selected_clan = msg.content.toLowerCase()
     if(Object.keys(rules.clans).indexOf(selected_clan) > -1){
-        var character = database.Character.find(msg.author);
+        var character = Character.find(msg.author);
         character.sheet.clan = selected_clan;
         character.save();
         msg.reply('Great, now select one attribute to have 4 dots');
@@ -140,7 +141,7 @@ function set_attributes_skills_with_character(msg, character, amount, value, cur
     return next_step;
 }
 function set_attributes_skills(msg, amount, value, current_step, next_step, next_message, attribute) {
-    var character = database.Character.find(msg.author);
+    var character = Character.find(msg.author);
     return set_attributes_skills_with_character(msg, character, amount, value, current_step, next_step, next_message, attribute)
 }
 
@@ -230,6 +231,23 @@ function JACK_2(msg){
     );
 }
 
+function build_character_discipline_list(character){
+    var disciplines = []
+    if(character.sheet.clan == 'thin_blood'){
+    }    
+    else if(character.sheet.clan == 'caitiff'){
+        for(var discipline in rules.disciplines){
+            if(discipline != 'thin_blood_alchemy')
+                disciplines.push(discipline)
+        }
+    }
+    else{
+        for(var i in rules.clans[character.sheet.clan].disciplines)
+            disciplines.push(rules.clans[character.sheet.clan].disciplines[i])
+    }
+    return disciplines
+}
+
 function step_after_skills(character){
     var reply = ''
     var next_step = step.DISCIPLINES_2
@@ -260,7 +278,7 @@ function step_after_skills(character){
 }
 
 function JACK_1(msg){
-    var character = database.Character.find(msg.author);
+    var character = Character.find(msg.author);
     var next_step = step_after_skills(character);
     // 10 at 1
     return set_attributes_skills_with_character(
@@ -301,7 +319,7 @@ function BALANCED_2(msg){
     );
 }
 function BALANCED_1(msg){
-    var character = database.Character.find(msg.author);
+    var character = Character.find(msg.author);
     var next_step = step_after_skills(character);
     // 7 at 1
     return set_attributes_skills_with_character(
@@ -354,7 +372,7 @@ function SPECIALIST_2(msg){
     );
 }
 function SPECIALIST_1(msg){
-    var character = database.Character.find(msg.author);
+    var character = Character.find(msg.author);
     var next_step = step_after_skills(character);
     // 3 at 1
     return set_attributes_skills_with_character(
@@ -369,24 +387,55 @@ function SPECIALIST_1(msg){
     );
 }
 
-function DISCIPLINES_2(msg){
-    var character = database.Character.find(msg.author);
-    var clan = character.sheet.clan
-    var available_disciplines = Object.keys(rules.clans[clan].disciplines)
+function set_discipline(msg, next_step, current_step, value, reply){
+    var character = Character.find(msg.author);
+    var available_disciplines = build_character_discipline_list(character)
     var discipline = msg.content.toLowerCase()
-    if(available.disciplines.indexOf(discipline) > -1){
-        character.sheet
-        return step.DISCIPLINES_1
+    if(available_disciplines.indexOf(discipline) > -1){
+        character.sheet[discipline] = value;
+        msg.reply(reply);
+        return next_step
     }
+    msg.reply(msg.content + " is not a valid discipline, please select one from the list above");
+    return current_step
+}
+
+function DISCIPLINES_2(msg){
+    var ret = set_discipline(msg,
+                             step.DISCIPLINES_1,
+                             step.DISCIPLINES_2,
+                             2,
+                             "Now select a discipline to have one dot from that same list"
+                            );
+
+    return ret
+
 }
 function DISCIPLINES_1(msg){
-    var character = database.Character.find(msg.author);
-    return step.PREDATOR
+    var reply = "Good, so now tell me your predator type from the list below:\n"
+    for(var type in rules.predator_type){
+        reply += '- ' + type + '\n';
+    }
+    var ret = set_discipline(msg,
+                             step.PREDATOR,
+                             step.DISCIPLINES_1,
+                             1,
+                             reply
+                            );
+    return ret
 }
 
 
 function PREDATOR(msg){
-    return FINISH(msg)
+    var predator_types = Object.keys(rules.predator_type)
+    var type = msg.content.toLowerCase()
+    if(predator_types.indexOf(type) > -1){
+        var character = Character.find(msg.author);
+        character.sheet['predator'] = type;
+        return FINISH(msg)
+    }
+    msg.reply(type + " is not a valid predator type, choose one from the list above")
+    return step.PREDATOR
 }
 
 function FINISH(msg){
