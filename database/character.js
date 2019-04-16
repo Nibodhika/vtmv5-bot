@@ -55,12 +55,18 @@ stains INTEGER DEFAULT 0)`
     for(var skill in rules.skills){
         SAVE += `${skill}, `
     }
+    for(var discipline in rules.disciplines){
+        SAVE += `${discipline}, `
+    }
     SAVE += ' hunger, health, h_superficial, h_aggravated, willpower, w_superficial, w_aggravated, humanity, stains) VALUES(@id, @name, @player, @concept, @predator, @sire, @clan, @generation, '
     for(var attr in rules.attributes){
         SAVE += `@${attr}, `
     }
     for(var skill in rules.skills){
         SAVE += `@${skill}, `
+    }
+    for(var discipline in rules.disciplines){
+        SAVE += `@${discipline}, `
     }
     SAVE += ' @hunger, @health, @h_superficial, @h_aggravated, @willpower, @w_superficial, @w_aggravated, @humanity, @stains)'
 

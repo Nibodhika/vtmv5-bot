@@ -393,6 +393,7 @@ function set_discipline(msg, next_step, current_step, value, reply){
     var discipline = msg.content.toLowerCase()
     if(available_disciplines.indexOf(discipline) > -1){
         character.sheet[discipline] = value;
+        character.save();
         msg.reply(reply);
         return next_step
     }

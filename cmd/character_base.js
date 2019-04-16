@@ -122,7 +122,16 @@ function print_sheet(character) {
     ]
     
     if(character.sheet.clan == 'caitiff'){
-        // TODO
+
+        for(var discipline in rules.disciplines){
+            if(character.sheet[discipline] > 0){
+                disciplines_field.push({
+                    name: discipline,
+                    inline: true,
+                    value: `${character.sheet[discipline]}`
+                })  
+            }
+        }
     }
     else{
         var available_disciplines = rules.clans[character.sheet.clan].disciplines
