@@ -10,6 +10,7 @@ const convictions = require('./convictions')
 const specialities = require('./specialities')
 const rouse = require('./rouse')
 const frenzy = require('./frenzy')
+const status = require('./status')
 
 module.exports = {
     help: help,
@@ -24,4 +25,5 @@ module.exports = {
     specialities: specialities,
     rouse: rouse,
     frenzy: frenzy,
+    status: status,
 }

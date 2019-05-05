@@ -7,8 +7,8 @@ function get_output(who){
     if(willpower == undefined)
         reply = "No willpower information for " + who;
     else{
-        var willpower_bar = base.build_willpower_bar(willpower,full_info=true)
-        reply = who + " is at " + willpower_bar.remaining + "/" + willpower_bar.life + "\n" + willpower_bar.bar;
+        var willpower_bar = base.build_willpower_bar(willpower)
+        reply = who + " is at " + willpower_bar.remaining + "/" + willpower_bar.life + " Willpower\n" + willpower_bar.bar;
     }
     return reply
 }

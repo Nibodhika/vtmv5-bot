@@ -38,6 +38,8 @@ function CONCEPT(character, content, who){
 function CLAN(character, content, who){
     if(Object.keys(rules.clans).indexOf(content) > -1){
         character.sheet.clan = content;
+        if(content == 'thin_blood')
+            character.sheet.generation = 14
         character.save();
         return [step.ATTRIBUTE_4]
     }

@@ -7,8 +7,8 @@ function get_output(who){
     if(health == undefined)
         reply = "No health information for " + who;
     else{
-        var life_bar = base.build_life_bar(health,full_info=true)
-        reply = who + " is at " + life_bar.remaining + "/" + life_bar.life + "\n" + life_bar.bar;
+        var life_bar = base.build_life_bar(health)
+        reply = who + " is at " + life_bar.remaining + "/" + life_bar.life + " Health\n" + life_bar.bar;
     }
     return reply
 }
@@ -87,7 +87,7 @@ module.exports = function(msg, args) {
                 return
             }
             var reply = get_output(who)
-            msg.reply(reply)
+            msg.channel.send(reply)
         }
     }
 }

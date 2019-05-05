@@ -11,14 +11,49 @@ function do_create_character(name, player) {
     return character;
 }
 
-function print_sheet(character) {
+function dash_on_empty(variable){
+    var out = variable;
+    if(!out)
+        out = '-'
+    return out
+}
 
-    function dash_on_empty(variable){
-        var out = variable;
-        if(!out)
-            out = '-'
-        return out
-    }
+function print_status(character) {
+    var willpower_bar = build_willpower_bar(character.sheet)
+    var life_bar = build_life_bar(character.sheet)
+    var fields = [
+        {
+            name: `Humanity ${character.sheet.humanity}/${10-character.sheet.humanity-character.sheet.stains}/${character.sheet.stains}`,
+            value: build_humanity_bar(character.sheet)
+        },
+        {
+            name: 'Resonance',
+            value: dash_on_empty(character.sheet.resonance)
+        },
+        {
+            name: `Willpower ${willpower_bar.remaining}/${willpower_bar.life}`,
+            value: willpower_bar.bar
+        },
+        {
+            name: `Health ${life_bar.remaining}/${life_bar.life}`,
+            value: life_bar.bar
+        },
+        {
+            name: 'Hunger',
+            value: `${character.sheet.hunger}`
+        },
+    ]
+
+
+    return {
+        embed: {
+            title: character.sheet.name,
+            description: character.sheet.player,
+            fields: fields
+        }}
+}
+
+function print_sheet(character) {
 
     var general_fields = [
         {
@@ -49,19 +84,8 @@ function print_sheet(character) {
     var attributes = character.get_attributes()
     var attribute_fields = [
         {
-            name: '===============',
-            value: '------------------------',
-            inline: true
-        },
-        {
-            name: '==== Attributes ====',
-            value: '------------------------',
-            inline: true
-        },
-        {
-            name: '===============',
-            value: '------------------------',
-            inline: true
+            value: '======================= Attributes ========================',
+            name: '\u200b'
         },
         
         {
@@ -83,20 +107,9 @@ function print_sheet(character) {
 
     var skills = character.get_skills()
     var skill_fields = [
-                {
-            name: '===============',
-            value: '------------------------',
-            inline: true
-        },
         {
-            name: '==== Skills ====',
-            value: '------------------------',
-            inline: true
-        },
-        {
-            name: '===============',
-            value: '------------------------',
-            inline: true
+            value: '========================= Skills ==========================',
+            name: '\u200b'
         },
 
         {
@@ -119,84 +132,77 @@ function print_sheet(character) {
 
     var disciplines_field = [
         {
-            name: '====================== Disciplines=======================',
-            value: "======================================================"
+            value: '====================== Disciplines=======================',
+            name: '\u200b'
         }
     ]
-
+    var disciplines = ""
     for(var discipline in rules.disciplines){
         if(character.sheet[discipline] > 0){
             disciplines_field.push({
-                name: discipline,
+                name: `${discipline}: ${character.sheet[discipline]}`,
                 inline: true,
-                value: `${character.sheet[discipline]}`
+                value: "-" // TODO list the powers for this discipline
             })
         }
     }
 
     var advantages_field = [
         {
-            name: '====================== Advantages =======================',
-            value: "======================================================"
+            value: '====================== Advantages ========================',
+            name: '\u200b'
         }
     ]
 
+    var merits = ""
+    var flaws = ""
+    
     for(var adv in character.advantages){
         var advantage = character.advantages[adv]
-
-        advantages_field.push({
-            name: `${adv} (${advantage.points})`,
-            inline: true,
-            value: dash_on_empty(advantage.specification)
-        })
+        if(rules.advantages[adv].flaw){
+            flaws += `\n**${adv} (${advantage.points})**
+${dash_on_empty(advantage.specification)}`
+        }
+        else{
+            merits += `\n**${adv} (${advantage.points})**
+${dash_on_empty(advantage.specification)}`
+        }
+            
     }
 
-    for(var adv in character.thin_blood_adv){
-        var specification = character.thin_blood_adv[adv]
+    advantages_field.push({
+            name: `Merits`,
+            inline: true,
+            value: dash_on_empty(merits)
+    })
+
+    advantages_field.push({
+            name: `Flaws`,
+            inline: true,
+            value: dash_on_empty(flaws)
+    })
+
+    if(character.sheet.clan == 'thin_blood'){
+        var thin_blood_adv = ""
+        for(var adv in character.thin_blood_adv){
+            var specification = character.thin_blood_adv[adv]
+            var merit_or_flaw = rules.thin_blood_adv[adv].flaw ? 'flaw' : 'merit'
+            thin_blood_adv += `\n**${adv} (${merit_or_flaw})**
+${dash_on_empty(specification)}`
+        }
 
         advantages_field.push({
-            name: `${adv}`,
+            name: `Thin Blood`,
             inline: true,
-            value: dash_on_empty(specification)
-        })
+            value: dash_on_empty(thin_blood_adv)
+        })    
     }
-
-    var status_fields = [
-        {
-            name: '========================= Status =========================',
-            value: "======================================================"
-        },
-        {
-            name: 'Health',
-            inline: true,
-            value: build_life_bar(character.sheet)
-        },
-        {
-            name: 'Hunger',
-            inline: true,
-            value: `____   ${character.sheet.hunger}   ____`
-        },
-        {
-            name: 'Humanity',
-            inline: true,
-            value: build_humanity_bar(character.sheet)
-        },
-        {
-            name: 'Willpower',
-            inline: true,
-            value: build_willpower_bar(character.sheet)
-        },
-        {
-            name: 'Resonance',
-            inline: true,
-            value: dash_on_empty(character.sheet.resonance)
-        },
-    ]
+        
 
     var fields = general_fields.concat(attribute_fields).concat(skill_fields).concat(advantages_field)
     if(disciplines_field.length > 1)
         fields = fields.concat(disciplines_field)
-    fields = fields.concat(status_fields)
+
     return {
         embed: {
             title: character.sheet.name,
@@ -205,7 +211,7 @@ function print_sheet(character) {
     }}
 }
 
-function build_bar(character_sheet, which, full_info=false){
+function build_bar(character_sheet, which){
     // Notice this should receive character.sheet
     var letter = which[0]
     var superficial = character_sheet[letter+'_superficial']
@@ -222,21 +228,21 @@ function build_bar(character_sheet, which, full_info=false){
         else
             life_bar+='[ ]'
     }
-    if(full_info)
-        return {
-            bar:life_bar,
-            damage: total_damage,
-            remaining: remaining_life,
-            life: character_sheet[which]
-        }
-    return life_bar
+
+    return {
+        bar:life_bar,
+        damage: total_damage,
+        remaining: remaining_life,
+        life: character_sheet[which]
+    }
+
 }
 
-function build_life_bar(character_sheet, full_info=false){
-    return build_bar(character_sheet,'health', full_info)
+function build_life_bar(character_sheet){
+    return build_bar(character_sheet,'health')
 }
-function build_willpower_bar(character_sheet, full_info=false){
-    return build_bar(character_sheet,'willpower', full_info)
+function build_willpower_bar(character_sheet){
+    return build_bar(character_sheet,'willpower')
 }
 
 function build_humanity_bar(character_sheet){
@@ -258,6 +264,7 @@ function build_humanity_bar(character_sheet){
 
 module.exports.do_create_character = do_create_character
 module.exports.print_sheet = print_sheet
+module.exports.print_status = print_status
 module.exports.build_life_bar = build_life_bar
 module.exports.build_willpower_bar = build_willpower_bar
 module.exports.build_humanity_bar = build_humanity_bar

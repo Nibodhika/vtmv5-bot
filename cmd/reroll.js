@@ -27,10 +27,10 @@ module.exports = function(msg, args) {
             description: 'Reroll all non 10s, useful when needing much more sucesses',
             values: [1,2,3,4,5,6,7,8,9]
         },
-            'messy': {
+        'messy': {
                 description: 'Rerolls all 10s and failures, useful when you rolled  a messy but still need more successes',
                 values: [1,2,3,4,5,10]
-}
+        }
     }
 
     types = ['fail']
