@@ -76,17 +76,17 @@ test('creation', () => {
     check_step(author,'athletics,brawl,craft,drive,firearms,larceny,melee,stealth',step.JACK_2,`athletics has already been chosen to have 3 dots`)
     check_step(author,'brawl,craft,drive,firearms,larceny,melee,stealth,survival',step.JACK_1)
     //should skilp academics because it's 0
-    check_step(author,'animal,etiquette,insight,intimidation,lead,performance,persuasion,streetwise,subterfuge,awareness',step.SPECIALITY_CRAFT)
+    check_step(author,'animal,etiquette,insight,intimidation,lead,performance,persuasion,streetwise,subterfuge,awareness',step.SPECIALTY_CRAFT)
 
-    check_step(author,'this is a craft speciality', step.SPECIALITY_PERFORMANCE)
-    // Now we jump science because it's 0 and go to the free speciality
-    check_step(author,'this is a performance speciality', step.SPECIALITY)
+    check_step(author,'this is a craft specialty', step.SPECIALTY_PERFORMANCE)
+    // Now we jump science because it's 0 and go to the free specialty
+    check_step(author,'this is a performance specialty', step.SPECIALTY)
 
-    check_step(author,'wrong', step.SPECIALITY,'You need to specify a skill and then a speciality, e.g. melee knifes')
+    check_step(author,'wrong', step.SPECIALTY,'You need to specify a skill and then a specialty, e.g. melee knifes')
 
-    check_step(author,'wrong knifes', step.SPECIALITY,`Unknown skill wrong`)
+    check_step(author,'wrong knifes', step.SPECIALTY,`Unknown skill wrong`)
 
-    check_step(author,'occult werewolves',step.SPECIALITY,`character has 0 points in occult, choose a speciality for a skill he has at least one point`)
+    check_step(author,'occult werewolves',step.SPECIALTY,`character has 0 points in occult, choose a specialty for a skill he has at least one point`)
 
     check_step(author,'melee knifes', step.DISCIPLINES_2)
 
@@ -103,7 +103,7 @@ test('creation', () => {
 
     // check_step(author,'alleycat', step.PREDATOR_CHARACTERISTIC_1)
     
-    // check_step(author,'wrong', step.PREDATOR_CHARACTERISTIC_1,`Please select one of the specialities listed before`)
+    // check_step(author,'wrong', step.PREDATOR_CHARACTERISTIC_1,`Please select one of the specialties listed before`)
 
     // check_step(author,'intimidation stickups', step.PREDATOR_CHARACTERISTIC_2)
 
@@ -174,10 +174,10 @@ test('create thin_blood', () => {
     check_step(author,'athletics',step.SPECIALIST_3)
     check_step(author,'brawl,craft,drive',step.SPECIALIST_2)
     check_step(author,'firearms,larceny,melee',step.SPECIALIST_1)
-    //should skip speciality for academics because it's 0
-    check_step(author,'stealth,survival,animal', step.SPECIALITY_CRAFT)
+    //should skip specialty for academics because it's 0
+    check_step(author,'stealth,survival,animal', step.SPECIALTY_CRAFT)
     
-    check_step(author,'this is a craft speciality', step.SPECIALITY)
+    check_step(author,'this is a craft specialty', step.SPECIALTY)
     check_step(author,'melee knifes', step.ADVANTAGES_MERIT)
 
     check_step(author,'wrong', step.ADVANTAGES_MERIT, 'wrong is not a valid advantage')

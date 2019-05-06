@@ -21,16 +21,16 @@ test('health', () => {
     character.save()
 
     check_cmd(author, '!health',
-             `health_cmd_test is at 4/7
+             `health_cmd_test is at 4/7 Health
 [X][/][/][ ][ ][ ][ ]`)
 
 
     check_cmd(author, '!health',
-              `health_cmd_test is at 4/7
+              `health_cmd_test is at 4/7 Health
 [X][/][/][ ][ ][ ][ ]`)
 
     check_cmd(author, '!health health_cmd_test',
-              `health_cmd_test is at 4/7
+              `health_cmd_test is at 4/7 Health
 [X][/][/][ ][ ][ ][ ]`)
 
     check_cmd(author, '!health health_cmd_test wrong',
@@ -41,7 +41,7 @@ test('health', () => {
              true)
 
     check_cmd(author, '!health health_cmd_test d',
-              `health_cmd_test is at 3/7
+              `health_cmd_test is at 3/7 Health
 [X][/][/][/][ ][ ][ ]`,
              true)
 
@@ -50,7 +50,7 @@ test('health', () => {
              true)
     
     check_cmd(author, '!health health_cmd_test d 2',
-              `health_cmd_test is at 1/7
+              `health_cmd_test is at 1/7 Health
 [X][/][/][/][/][/][ ]`,
              true)
 
@@ -59,27 +59,27 @@ test('health', () => {
               true)
     
     check_cmd(author, '!health health_cmd_test d 1 aggravated',
-              `health_cmd_test is at 0/7
+              `health_cmd_test is at 0/7 Health
 [X][X][/][/][/][/][/]`,
               true)
 
     check_cmd(author, '!health health_cmd_test h 3 aggravated',
-              `health_cmd_test is at 2/7
+              `health_cmd_test is at 2/7 Health
 [/][/][/][/][/][ ][ ]`,
               true)
 
     check_cmd(author, '!health health_cmd_test h 2',
-              `health_cmd_test is at 4/7
+              `health_cmd_test is at 4/7 Health
 [/][/][/][ ][ ][ ][ ]`,
               true)
 
     check_cmd(author, '!health health_cmd_test s 2 superficial',
-              `health_cmd_test is at 5/7
+              `health_cmd_test is at 5/7 Health
 [/][/][ ][ ][ ][ ][ ]`,
               true)
 
     check_cmd(author, '!health health_cmd_test s 1 aggravated',
-              `health_cmd_test is at 4/7
+              `health_cmd_test is at 4/7 Health
 [X][/][/][ ][ ][ ][ ]`,
              true)
 

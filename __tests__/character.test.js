@@ -13,9 +13,9 @@ test('Create save and find a character', () => {
     var character = new Character('Alucard', 'a player')
     character.sheet.strength = 3
     character.sheet.brawl = 4
-    character.add_speciality('brawl','martial arts')
+    character.add_specialty('brawl','martial arts')
     character.sheet.melee = 3
-    character.add_speciality('melee','knifes')
+    character.add_specialty('melee','knifes')
 
     var out = character.add_advantage('wrong',2)
     expect(out).toEqual(`wrong is not a real advantage.`)
@@ -66,43 +66,43 @@ test('Get attr skill and discipline', () => {
     expect(character.get('potence')).toBe(2)
 })
 
-test('character speciality', () => {
-    var character = new Character('speciality_test', 'speciality_test player')
+test('character specialty', () => {
+    var character = new Character('specialty_test', 'specialty_test player')
     character.sheet.strength = 3
     character.sheet.brawl = 4
     character.sheet.potence = 2
 
-    var ret = character.add_speciality('wrong', 'speciality')
+    var ret = character.add_specialty('wrong', 'specialty')
     expect(ret).toEqual('Unknown skill wrong')
 
-    ret = character.add_speciality('sci', 'speciality name')
-    expect(ret).toEqual(`Character ${character.sheet.name} doesn't have the skill science, so you can't pick a speciality for it`)
+    ret = character.add_specialty('sci', 'specialty name')
+    expect(ret).toEqual(`Character ${character.sheet.name} doesn't have the skill science, so you can't pick a specialty for it`)
     
-    // If character hasn't been saved yet it should be saved when adding a speciality so it has an id
+    // If character hasn't been saved yet it should be saved when adding a specialty so it has an id
     expect(character.sheet.id).toBe(null)
-    ret = character.add_speciality('bra', 'speciality name')
+    ret = character.add_specialty('bra', 'specialty name')
     expect(character.sheet.id).not.toBe(null)
-    expect(ret).toEqual(character.sheet.name + ' now has a speciality "speciality name" for brawl')
+    expect(ret).toEqual(character.sheet.name + ' now has a specialty "specialty name" for brawl')
     // Reload the character and check if it is there
-    character = Character.find('speciality_test player')
-    expect(character.specialities).toEqual({
-        brawl: ['speciality name']
+    character = Character.find('specialty_test player')
+    expect(character.specialties).toEqual({
+        brawl: ['specialty name']
     })
 
-    // Removing a wrong speciality should return an error
-    ret = character.remove_speciality('wrong')
-    expect(ret).toEqual(`${character.sheet.name} does not have the "wrong" speciality for any skill`)
+    // Removing a wrong specialty should return an error
+    ret = character.remove_specialty('wrong')
+    expect(ret).toEqual(`${character.sheet.name} does not have the "wrong" specialty for any skill`)
 
     // Removing something that actually exists should remove it
-    ret = character.remove_speciality('speciality name')
-    expect(ret).toEqual(`${character.sheet.name} no longer has the "speciality name" speciality for brawl`)
+    ret = character.remove_specialty('specialty name')
+    expect(ret).toEqual(`${character.sheet.name} no longer has the "specialty name" specialty for brawl`)
     // Reload the character and check if it's vanished
-    character = Character.find('speciality_test player')
-    expect(character.specialities).toEqual({})
+    character = Character.find('specialty_test player')
+    expect(character.specialties).toEqual({})
 })
 
 test('getters for sheet', () => {
-    var character = new Character('speciality_test', 'speciality_test player')
+    var character = new Character('specialty_test', 'specialty_test player')
     character.sheet.strength = 3
     character.sheet.brawl = 4
     character.sheet.potence = 2

@@ -21,11 +21,25 @@ module.exports = function character_cmd(msg, args) {
             msg.reply("Could not find a character for " + who);
         }
         else{
-            var reply = 'Character has the following specialities:'
-            for(var skill in character.specialities){
-                reply += '\n- ' + skill + ": " + character.specialities[skill]
+
+            specialties_fields = []
+            var reply = 'Character has the following specialties:'
+            for(var skill in character.specialties){
+                var specialties = character.specialties[skill]
+                for(var specialty in specialties){
+                    specialties_fields.push({
+                        name: skill,
+                        value: specialties[specialty]
+                    })    
+                }
             }
-            msg.channel.send(reply)
+            msg.channel.send({
+                embed:{
+                    title: `Specialties`,
+                    description: `${who}`,
+                    fields: specialties_fields
+                }
+            })
         }
     }
     else{
@@ -42,11 +56,11 @@ module.exports = function character_cmd(msg, args) {
                 if(args.length > 3){
                     var what = args.slice(3).join(' ').split(':');
                     if(what.length < 2){
-                        msg.reply("Give me <skill>:<speciality>")
+                        msg.reply("Give me <skill>:<specialty>")
                     }
                     var skill = what[0]
-                    var speciality = what[1]
-                    var reply = character.add_speciality(skill, speciality)
+                    var specialty = what[1]
+                    var reply = character.add_specialty(skill, specialty)
                     msg.reply(reply)
                 }
                 else{
@@ -55,8 +69,8 @@ module.exports = function character_cmd(msg, args) {
             }
             else if(['r', 'remove'].indexOf(option) > -1){
                 if(args.length > 3){
-                    var speciality = args.slice(3).join(' ');
-                    var reply = character.remove_speciality(speciality)
+                    var specialty = args.slice(3).join(' ');
+                    var reply = character.remove_specialty(specialty)
                     msg.reply(reply)
                 }
                 else{

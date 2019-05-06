@@ -45,17 +45,17 @@ Now, tell me the core concept for him, type a phrase that succinctly describes y
         return 'Now select 3 skills separated by coma to have 2 dots, e.g. "athletics,brawl,craft"'
     case step.SPECIALIST_1:
         return 'Now select 3 skills separated by coma to have 1 dots, e.g. "athletics,brawl,craft"'
-        //TODO replace these lists with the ones on the rules specialities
-    case step.SPECIALITY_ACADEMICS:
-        return `Select one free speciality for academics, examples: Architecture, English Literature, History of Art, History (specific Field or Period), Journalism, Philosophy, Research, Teaching, Theology`
-    case step.SPECIALITY_CRAFT:
-        return `Select one free speciality for craft, examples: Carpentry, Carving, Design, Painting, Sculpting, Sewing, Weaponsmithing`
-    case step.SPECIALITY_PERFORMANCE:
-        return `Select one free speciality for performance, examples: Comedy, Dance, Drama, Drums, Guitar, Keyboards,vPoetry, Public Speaking, Rap, Singing, Violin, Wind Instruments`
-    case step.SPECIALITY_SCIENCE:
-        return `Select one free speciality for science, examples:: Astronomy, Biology, Chemistry, Demolitions, Engineering, Genetics, Geology, Mathematics, Physics`
-    case step.SPECIALITY:
-        return `Select a speciality for a skill, tell me <skill> <speciality>, you can check a list of suggested specialities for a given skill by typing !help <skill>, e.g. medicine first aid`
+        //TODO replace these lists with the ones on the rules specialties
+    case step.SPECIALTY_ACADEMICS:
+        return `Select one free specialty for academics, examples: Architecture, English Literature, History of Art, History (specific Field or Period), Journalism, Philosophy, Research, Teaching, Theology`
+    case step.SPECIALTY_CRAFT:
+        return `Select one free specialty for craft, examples: Carpentry, Carving, Design, Painting, Sculpting, Sewing, Weaponsmithing`
+    case step.SPECIALTY_PERFORMANCE:
+        return `Select one free specialty for performance, examples: Comedy, Dance, Drama, Drums, Guitar, Keyboards,vPoetry, Public Speaking, Rap, Singing, Violin, Wind Instruments`
+    case step.SPECIALTY_SCIENCE:
+        return `Select one free specialty for science, examples:: Astronomy, Biology, Chemistry, Demolitions, Engineering, Genetics, Geology, Mathematics, Physics`
+    case step.SPECIALTY:
+        return `Select a specialty for a skill, tell me <skill> <specialty>, you can check a list of suggested specialties for a given skill by typing !help <skill>, e.g. medicine first aid`
     case step.DISCIPLINES_2:
         return disciplines_2(character)
     case step.POWER_1:
@@ -158,7 +158,7 @@ function predator(){
 
 function predator_characteristic_1(character){
     if(character.sheet.predator == 'alleycat'){
-        return 'Now choose a speciality, either "intimidation stickups" or "brawl grappling"'
+        return 'Now choose a specialty, either "intimidation stickups" or "brawl grappling"'
     }
     return `${character.sheet.predator}: This predator type has not been created yet for step 1`
 }

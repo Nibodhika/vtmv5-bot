@@ -20,7 +20,13 @@ test('convictions', () => {
     character.save()
     
     check_cmd(author, '!convictions',
-              'Character has the following convictions and touchstones:'
+              {
+                  embed: {
+                      description: "convictions_cmd_test",
+                      fields: [],
+                      title: "Convictions and touchstones",
+                  }
+              }
              )
 
     character = Character.find(author.name)
@@ -40,9 +46,22 @@ test('convictions', () => {
     character = Character.find(author.name)
     expect(character.convictions[expected_conviction]).toEqual(expected_touchstone)
 
+    expected_reply = {
+        embed:  {
+            title: "Convictions and touchstones",
+            description: author.name,
+            fields:  [
+                {
+                    name: expected_conviction,
+                    value: expected_touchstone
+                },
+            ],
+
+        },
+    }
+    
     check_cmd(author, '!convictions',
-              `Character has the following convictions and touchstones:
-- ${expected_conviction}: ${expected_touchstone}`
+              expected_reply
              )
 
     check_cmd(author, `!convictions ${author.name} r wrong`,

@@ -137,20 +137,20 @@ test('hunger', () => {
 })
 
 
-test('speciality', () => {
-    var character = create_and_save_character('speciality test')
-    database.specialities.set(character.id,'knife','melee')
-    database.specialities.set(character.id,'sword','melee')
-    database.specialities.set(character.id,'martial arts','brawl')
-    var specialities = database.specialities.get(character.id)
-    expect(specialities).toEqual({
+test('specialty', () => {
+    var character = create_and_save_character('specialty test')
+    database.specialties.set(character.id,'knife','melee')
+    database.specialties.set(character.id,'sword','melee')
+    database.specialties.set(character.id,'martial arts','brawl')
+    var specialties = database.specialties.get(character.id)
+    expect(specialties).toEqual({
         melee: ['knife', 'sword'],
         brawl: ['martial arts']
     })
 
-    database.specialities.delete(character.id)
-    specialities = database.specialities.get(character.id)
-    expect(specialities).toEqual({})
+    database.specialties.delete(character.id)
+    specialties = database.specialties.get(character.id)
+    expect(specialties).toEqual({})
 
 
     var saved = {
@@ -158,8 +158,8 @@ test('speciality', () => {
         intimidation:['force']
     }
     // This entry should be deleted when save is called
-    database.specialities.set(character.id,'elysium','etiquette')
-    database.specialities.save(character.id,saved)
-    specialities = database.specialities.get(character.id)
-    expect(specialities).toEqual(saved)
+    database.specialties.set(character.id,'elysium','etiquette')
+    database.specialties.save(character.id,saved)
+    specialties = database.specialties.get(character.id)
+    expect(specialties).toEqual(saved)
 })

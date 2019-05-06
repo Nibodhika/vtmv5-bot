@@ -7,7 +7,7 @@ var first_steps = require('./first_steps')
 
 var attributes = require('./attributes')
 var skills = require('./skills')
-var speciality = require('./speciality')
+var specialty = require('./specialty')
 var disciplines = require('./disciplines')
 var predator = require('./predator')
 var advantages = require('./advantages')
@@ -108,20 +108,20 @@ function do_create(msg, current_step) {
         out = skills.SPECIALIST_1(character,content,who);
         break;
 
-    case step.SPECIALITY_ACADEMICS:
-        out = speciality.SPECIALITY_ACADEMICS(character,content,who);
+    case step.SPECIALTY_ACADEMICS:
+        out = specialty.SPECIALTY_ACADEMICS(character,content,who);
         break;
-    case step.SPECIALITY_CRAFT:
-        out = speciality.SPECIALITY_CRAFT(character,content,who);
+    case step.SPECIALTY_CRAFT:
+        out = specialty.SPECIALTY_CRAFT(character,content,who);
         break;
-    case step.SPECIALITY_PERFORMANCE:
-        out = speciality.SPECIALITY_PERFORMANCE(character,content,who);
+    case step.SPECIALTY_PERFORMANCE:
+        out = specialty.SPECIALTY_PERFORMANCE(character,content,who);
         break;
-    case step.SPECIALITY_SCIENCE:
-        out = speciality.SPECIALITY_SCIENCE(character,content,who);
+    case step.SPECIALTY_SCIENCE:
+        out = specialty.SPECIALTY_SCIENCE(character,content,who);
         break;
-    case step.SPECIALITY:
-        out = speciality.SPECIALITY(character,content,who);
+    case step.SPECIALTY:
+        out = specialty.SPECIALTY(character,content,who);
         break;
 
     case step.DISCIPLINES_2:

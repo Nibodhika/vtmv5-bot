@@ -113,23 +113,23 @@ module.exports.skill_distributions = [
     'specialist',
 ]
 
-function speciality_step(character, next_step=step.SPECIALITY_ACADEMICS){
+function specialty_step(character, next_step=step.SPECIALTY_ACADEMICS){
 
-    if(next_step == step.SPECIALITY_ACADEMICS){
+    if(next_step == step.SPECIALTY_ACADEMICS){
         if(character.sheet.academics == 0)
-            return speciality_step(character, step.SPECIALITY_CRAFT)
+            return specialty_step(character, step.SPECIALTY_CRAFT)
     }
-    else if(next_step == step.SPECIALITY_CRAFT){
+    else if(next_step == step.SPECIALTY_CRAFT){
         if(character.sheet.craft == 0)
-            return speciality_step(character, step.SPECIALITY_PERFORMANCE)
+            return specialty_step(character, step.SPECIALTY_PERFORMANCE)
     }
-    else if(next_step == step.SPECIALITY_PERFORMANCE){
+    else if(next_step == step.SPECIALTY_PERFORMANCE){
         if(character.sheet.performance == 0)
-            return speciality_step(character, step.SPECIALITY_SCIENCE)
+            return specialty_step(character, step.SPECIALTY_SCIENCE)
     }
-    else if(next_step == step.SPECIALITY_SCIENCE){
+    else if(next_step == step.SPECIALTY_SCIENCE){
         if(character.sheet.science == 0)
-            return step.SPECIALITY
+            return step.SPECIALTY
     }
 
     return next_step
@@ -161,6 +161,6 @@ function y_n_question(content, on_yes, on_no, current_step){
 module.exports.set_attributes = set_attributes
 module.exports.set_skills = set_skills
 module.exports.build_character_discipline_list = build_character_discipline_list
-module.exports.speciality_step = speciality_step
+module.exports.specialty_step = specialty_step
 module.exports.discipline_step = discipline_step
 module.exports.y_n_question = y_n_question

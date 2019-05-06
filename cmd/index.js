@@ -7,7 +7,7 @@ const willpower = require('./willpower.js')
 const character = require('./character.js')
 const create = require('./creating')
 const convictions = require('./convictions')
-const specialities = require('./specialities')
+const specialties = require('./specialties')
 const rouse = require('./rouse')
 const frenzy = require('./frenzy')
 const status = require('./status')
@@ -22,7 +22,7 @@ module.exports = {
     character: character,
     create: create,
     convictions: convictions,
-    specialities: specialities,
+    specialties: specialties,
     rouse: rouse,
     frenzy: frenzy,
     status: status,

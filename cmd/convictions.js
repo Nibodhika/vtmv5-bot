@@ -21,11 +21,23 @@ module.exports = function character_cmd(msg, args) {
             msg.reply("Could not find a character for " + who);
         }
         else{
-            var convictions = 'Character has the following convictions and touchstones:'
+            
+            conviction_fields = []
             for(var conviction in character.convictions){
-                convictions += '\n- ' + conviction + ": " + character.convictions[conviction]
+                conviction_fields.push({
+                    name: conviction,
+                    value: character.convictions[conviction]
+                })
+
             }
-            msg.channel.send(convictions)
+
+            msg.channel.send({
+                embed:{
+                    title: `Convictions and touchstones`,
+                    description: `${who}`,
+                    fields: conviction_fields
+                }
+            })
         }
     }
     else{

@@ -69,7 +69,7 @@ test('character', () => {
     check_set_sheet('clan', 'brujah', '')
 
 
-    // Check add speciality with invalid points
+    // Check add specialty with invalid points
     check_cmd(author, `!character ${author.name} a iliterate 1`,
                   `1 is not a valid number of points for iliterate`,
                   true)

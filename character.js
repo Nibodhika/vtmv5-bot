@@ -54,7 +54,7 @@ class Character {
             this.sheet[discipline] = 0;
         }
 
-        this.specialities = {}
+        this.specialties = {}
         this.powers = []
         this.advantages = {}
         this.thin_blood_adv = {}
@@ -63,7 +63,7 @@ class Character {
 
     save(){
         this.sheet.id = database.character.save(this.sheet);
-        database.specialities.save(this.sheet.id, this.specialities)
+        database.specialties.save(this.sheet.id, this.specialties)
         database.powers.save(this.sheet.id, this.powers)
         database.advantages.save(this.sheet.id, this.advantages)
         database.thin_blood_adv.save(this.sheet.id, this.thin_blood_adv)
@@ -76,8 +76,8 @@ class Character {
             return false;
         this.sheet = row;
 
-        // Load specialities
-        this.specialities = database.specialities.get(this.sheet.id)
+        // Load specialties
+        this.specialties = database.specialties.get(this.sheet.id)
         //Load powers
         this.powers = database.powers.get(this.sheet.id)
         //Load advantages
@@ -181,7 +181,7 @@ class Character {
         return this._get_attr_skill_list(rules.skills)
     }
 
-    add_speciality(skill, speciality){
+    add_specialty(skill, specialty){
         var meant = Character.unalias_skill(skill)
         if(meant === undefined){
             return `Unknown skill ` + skill
@@ -190,21 +190,21 @@ class Character {
         if(this.sheet[meant] > 0){
             if(this.sheet.id == null)
                 this.save()
-            database.specialities.set(this.sheet.id,speciality, meant)
-            if(!(meant in this.specialities)){
-                this.specialities[meant] = []
+            database.specialties.set(this.sheet.id,specialty, meant)
+            if(!(meant in this.specialties)){
+                this.specialties[meant] = []
             }
-            this.specialities[meant].push(speciality)
-            return `${this.sheet.name} now has a speciality "${speciality}" for ${meant}`
+            this.specialties[meant].push(specialty)
+            return `${this.sheet.name} now has a specialty "${specialty}" for ${meant}`
         }
         
-        return `Character ${this.sheet.name} doesn't have the skill ${meant}, so you can't pick a speciality for it`
+        return `Character ${this.sheet.name} doesn't have the skill ${meant}, so you can't pick a specialty for it`
     }
-    remove_speciality(speciality){
+    remove_specialty(specialty){
         var skill = undefined
         var index = undefined
-        for(var s in this.specialities){
-            var i = this.specialities[s].indexOf(speciality)
+        for(var s in this.specialties){
+            var i = this.specialties[s].indexOf(specialty)
             if(i != -1){
                 skill = s
                 index = i
@@ -213,13 +213,13 @@ class Character {
         }
 
         if(skill === undefined){
-            return `${this.sheet.name} does not have the "${speciality}" speciality for any skill`
+            return `${this.sheet.name} does not have the "${specialty}" specialty for any skill`
         }
 
-        this.specialities[skill].splice(index, 1)
-        database.specialities.delete_one(this.sheet.id,speciality)
+        this.specialties[skill].splice(index, 1)
+        database.specialties.delete_one(this.sheet.id,specialty)
         
-        return `${this.sheet.name} no longer has the "${speciality}" speciality for ${skill}`
+        return `${this.sheet.name} no longer has the "${specialty}" specialty for ${skill}`
 
     }
 
@@ -301,7 +301,7 @@ class Character {
 
     delete_from_database(){
         database.powers.delete(this.sheet.id)
-        database.specialities.delete(this.sheet.id)
+        database.specialties.delete(this.sheet.id)
         database.character.delete(this.sheet.id)
     }
 

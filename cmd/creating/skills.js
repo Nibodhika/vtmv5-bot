@@ -3,7 +3,7 @@ var step = require('./steps')
 var helpers = require('./helpers')
 var set_skills = helpers.set_skills
 var skill_distributions = helpers.skill_distributions
-var speciality_step = helpers.speciality_step
+var specialty_step = helpers.specialty_step
 
 function SKILL_DISTRIBUTION(character,content,who){
     if(skill_distributions.indexOf(content) > -1){
@@ -52,7 +52,7 @@ function JACK_1(character,content,who){
         10,
         1,
         step.JACK_1,
-        speciality_step(character)
+        specialty_step(character)
     );
 }
 
@@ -87,7 +87,7 @@ function BALANCED_1(character,content,who){
         7,
         1,
         step.BALANCED_1,
-        speciality_step(character)
+        specialty_step(character)
     );
 }
 
@@ -133,7 +133,7 @@ function SPECIALIST_1(character,content,who){
         3,
         1,
         step.SPECIALIST_1,
-        speciality_step(character)
+        specialty_step(character)
     );
 }
 
