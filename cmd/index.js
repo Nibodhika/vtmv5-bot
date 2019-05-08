@@ -11,6 +11,7 @@ const specialties = require('./specialties')
 const rouse = require('./rouse')
 const frenzy = require('./frenzy')
 const status = require('./status')
+const humanity = require('./humanity')
 
 module.exports = {
     help: help,
@@ -26,4 +27,5 @@ module.exports = {
     rouse: rouse,
     frenzy: frenzy,
     status: status,
+    humanity: humanity,
 }
