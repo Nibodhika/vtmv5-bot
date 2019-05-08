@@ -44,6 +44,7 @@ class Character {
             resonance:'',
             desire:'',
             ambition:'',
+            xp:0,
         }
 
         for(var attr in rules.attributes){

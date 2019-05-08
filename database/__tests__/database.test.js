@@ -25,6 +25,7 @@ function create_and_save_character(name){
         blood_potency: 0,
         desire:'my desire',
         ambition: 'my ambition',
+        xp:12,
     }
     for(var attr in rules.attributes){
         character[attr] = 1;
