@@ -8,7 +8,12 @@ In order for the bot to connect to discord you will need to first create a bot a
 
 ```json
 {
- "token": "your token goes here"
+ "token": "your token goes here",
+ "tenets": [
+    "First campaign tenet goes here",
+    "Second campaign tenet goes here",
+    "Third campaign tenet goes here",
+    ]
 }
 
 ```

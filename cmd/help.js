@@ -38,6 +38,7 @@ var topics = {
     predator_type: ['predator_type'],
     reroll: ['reroll'],
     humanity: ['humanity'],
+    tenets: ['tenets']
 }
 
 function help_cmd(msg, args){
@@ -278,4 +279,17 @@ help.humanity = function(args){
     else{
         reply = "Humanity measures how human your vampire still is, give a level to get rule information for that humanity level"
     }
+}
+
+help.tenets = function(args){
+    var config = require('../config.json');
+
+    var reply = "No tennet information"
+    if("tenets" in config){
+        reply = "Campaign has the following tenets:"
+        for(var i in config.tenets){
+            reply += '\n- ' + config.tenets[i]
+        }
+    }
+    return reply
 }
