@@ -160,3 +160,21 @@ module.exports = {
     }
 }
 ```
+
+## humanity.js
+
+This file contains a list of characteristics for a given level of humanity
+
+```javascript
+module.exports = [
+   // 0
+   [
+   "Vampires at 0 humanity have this characteristic",
+   "They can do this",
+   ],
+   // 1
+   [
+   "At 1 humanity the vampire can no longer do this",
+   ]
+]
+```

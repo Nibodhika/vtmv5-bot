@@ -8,11 +8,21 @@ function get_output(character){
     return reply
 }
 
+function get_humanity_characteristics(humanity_level){
+    var reply = ""
+    var humanity_rules = rules.humanity[humanity_level]
+    for(var i in humanity_rules){
+        reply += '\n- ' + humanity_rules[i]
+    }
+    return reply
+}
+
 module.exports = function(msg, args) {
-    // !willpower <who> <option> <amount> <type>
+
     var who = msg.author;
-    if(args.length > 1)
+    if(args.length > 1){
         who = args[1];
+    }
 
     var character = Character.find(who)
     if(character === undefined){
@@ -51,7 +61,7 @@ module.exports = function(msg, args) {
                     var w_damage = free_boxes * -1
                     character.sheet.stains = 10-character.sheet.humanity
                     character.sheet.w_aggravated += w_damage
-                    reply = `${who} has suffer degeneration and taken ${w_damage} point of aggravated willpower damage and is now Impaired (page 239)\n`
+                    reply = `${who} has suffer degeneration and taken ${w_damage} point(s) of aggravated willpower damage and is now Impaired (page 239)\n`
                 }
                 else
                     reply = `${who} is now at `
@@ -61,7 +71,7 @@ module.exports = function(msg, args) {
             }
             else if(['remorse'].indexOf(option) > -1){
                 if(character.sheet.stains == 0){
-                    reply = `No remorse check needed for ${who}\n He stays at ${character.sheet.humanity}`
+                    reply = `No remorse check needed for ${who}\n He stays at Humanity ${character.sheet.humanity}`
 
                 }
                 else{
@@ -79,12 +89,7 @@ module.exports = function(msg, args) {
                     else{
                         character.sheet.humanity--
                         character.sheet.stains = 0
-                        reply = `${who} failed his remorse check and is now at Humanity ${character.sheet.humanity}\nDice: ${dice}\nYour new level of humanity has the following characteristics:`
-                        var humanity_rules = rules.humanity[character.sheet.humanity]
-                        for(var i in humanity_rules){
-                            reply += '\n- ' + humanity_rules[i]
-                        }
-                        
+                        reply = `${who} failed his remorse check and is now at Humanity ${character.sheet.humanity}\nDice: ${dice}\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(character.sheet.humanity)}`
                     }
                     character.save()    
                 }
@@ -92,6 +97,10 @@ module.exports = function(msg, args) {
             }
             else if(['rationalize'].indexOf(option) > -1){
                 // Player rationalizes actions and loses a point in humanity
+                character.sheet.humanity--
+                character.sheet.stains = 0
+                reply = `${who} rationalizes the monster he's become and is now at Humanity ${character.sheet.humanity} and no longer Impaired\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(character.sheet.humanity)}`
+                character.save()
             }
             else{
                 msg.reply("Unknown option " + option);

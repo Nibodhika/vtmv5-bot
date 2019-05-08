@@ -24,6 +24,7 @@ var help_str = `Valid commands are:
     Does a frenzy test
 !create
     Starts the character creation in a DM
+!humanity [who=author] [option] [value]
 `
 
 var topics = {
@@ -35,7 +36,8 @@ var topics = {
     topics: ['topic', 'topics'],
     disciplines: ['discipline', 'disciplines'],
     predator_type: ['predator_type'],
-    reroll: ['reroll']
+    reroll: ['reroll'],
+    humanity: ['humanity'],
 }
 
 function help_cmd(msg, args){
@@ -258,4 +260,22 @@ help.predator_type = function(args){
         }
     }
     return reply
+}
+
+help.humanity = function(args){
+    if(args.length > 2) {
+        var humanity_level = Number(args[2])
+        if(isNaN(humanity_level) || humanity_level < 0 || humanity_level > 10){
+            reply = `args[2] is not a valid humanity level, only numbers from 0 to 10 are valid`
+        }
+        
+        var reply = `Humanity ${humanity_level} has the following characteristics:`
+        var humanity_rules = rules.humanity[humanity_level]
+        for(var i in humanity_rules){
+            reply += '\n- ' + humanity_rules[i]
+        }
+    }
+    else{
+        reply = "Humanity measures how human your vampire still is, give a level to get rule information for that humanity level"
+    }
 }
