@@ -38,10 +38,10 @@ module.exports = function(msg, args){
         reply = 'Failure'
         if(character.sheet.hunger >= 5){
             color = 16711680
-            if(character.sheet.clan != 'thin_blood'){
+            if(character.sheet.clan != 'thin_blood')
                 description = `Make a Hunger Frenzy test with difficulty 4 or ride the wave`
-            }
-            description = `You would enter a hunger frenzy, if your blood weren't so thin`
+            else
+                description = `You would enter a hunger frenzy, if your blood weren't so thin`
         }
         else{
             character.sheet.hunger++

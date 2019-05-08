@@ -16,9 +16,9 @@ test('basic rouse', () =>{
     var author = new fake.Author('basic_rouse')
 
     check_cmd(author,
-                           "!rouse",
-                           [3],
-                           ["No character information for basic_rouse"])
+              "!rouse",
+              [3],
+              ["No character information for basic_rouse"])
 
     // Create the character
     var character = new Character('character_basic_rouse', author.name)
@@ -26,21 +26,21 @@ test('basic rouse', () =>{
     character.save()
     
     check_cmd(author,
-                           "!rouse",
-                           [3, 2],
-                           [{
-                               embed: {
-                                   color: 0,
-                                   title: "Failure",
-                                   description: "Your hunger increases to 3",
-                                   fields: [
-                                       {
-                                           name: "Dice",
-                                           value: "3",
-                                       },
-                                   ],
-                               },
-                           }])
+              "!rouse",
+              [3, 2],
+              [{
+                  embed: {
+                      color: 0,
+                      title: "Failure",
+                      description: "Your hunger increases to 3",
+                      fields: [
+                          {
+                              name: "Dice",
+                              value: "3",
+                          },
+                      ],
+                  },
+              }])
 
     // Character should have hunger increased
     character = Character.find(author.name);
@@ -49,72 +49,104 @@ test('basic rouse', () =>{
 
     // A success should not increase hunger
     check_cmd(author,
-                           "!rouse",
-                           [6, 2],
-                           [{
-                               embed: {
-                                   color: 33823,
-                                   title: "Success",
-                                   description: "Your hunger stays the same",
-                                   fields: [
-                                       {
-                                           name: "Dice",
-                                           value: "6",
-                                       },
-                                   ],
-                               },
-                           }])
+              "!rouse",
+              [6, 2],
+              [{
+                  embed: {
+                      color: 33823,
+                      title: "Success",
+                      description: "Your hunger stays the same",
+                      fields: [
+                          {
+                              name: "Dice",
+                              value: "6",
+                          },
+                      ],
+                  },
+              }])
 
     // Character should have the same hunger
     character = Character.find(author.name);
     expect(character.sheet.hunger).toBe(3)
 
+    // Check wrong parameter
+    check_cmd(author,
+              "!rouse wrong",
+              [3, 2],
+              "Amount 'wrong' is not an integer"
+              )
+    
     // Test a rouse check with two dice
     check_cmd(author,
-                           "!rouse 2",
-                           [3, 2],
-                           [{
-                               embed: {
-                                   color: 0,
-                                   title: "Failure",
-                                   description: "Your hunger increases to 4",
-                                   fields: [
-                                       {
-                                           name: "Dice",
-                                           value: "3,2",
-                                       },
-                                   ],
-                               },
-                           }])
+              "!rouse 2",
+              [3, 2],
+              [{
+                  embed: {
+                      color: 0,
+                      title: "Failure",
+                      description: "Your hunger increases to 4",
+                      fields: [
+                          {
+                              name: "Dice",
+                              value: "3,2",
+                          },
+                      ],
+                  },
+              }])
 
     // Character should have hunger increased
     character = Character.find(author.name);
     expect(character.sheet.hunger).toBe(4)
 
-    // If the character is at hunger 5 and fails it should frenzy
+    // If the character is at hunger 5 and fails it should frenzy if not thin blood
     character.sheet.hunger = 5
+    character.sheet.clan = 'thin_blood'
     character.save()
 
     check_cmd(author,
-                           "!rouse",
-                           [3],
-                           [{
-                               embed: {
-                                   color: 16711680,
-                                   title: "Failure",
-                                   description: "You would enter a hunger frenzy, if your blood weren't so thin",
-                                   fields: [
-                                       {
-                                           name: "Dice",
-                                           value: "3",
-                                       },
-                                   ],
-                               },
-                           }])
+              "!rouse",
+              [3],
+              [{
+                  embed: {
+                      color: 16711680,
+                      title: "Failure",
+                      description: "You would enter a hunger frenzy, if your blood weren't so thin",
+                      fields: [
+                          {
+                              name: "Dice",
+                              value: "3",
+                          },
+                      ],
+                  },
+              }])
 
     // Character should have stayed the same
     character = Character.find(author.name);
     expect(character.sheet.hunger).toBe(5)
 
-    
+
+    // Checking non thin_blood characters
+    character.sheet.clan = 'brujah'
+    character.save()
+
+    check_cmd(author,
+              "!rouse",
+              [3],
+              [{
+                  embed: {
+                      color: 16711680,
+                      title: "Failure",
+                      description: "Make a Hunger Frenzy test with difficulty 4 or ride the wave",
+                      fields: [
+                          {
+                              name: "Dice",
+                              value: "3",
+                          },
+                      ],
+                  },
+              }])
+
+    // Character should have stayed the same
+    character = Character.find(author.name);
+    expect(character.sheet.hunger).toBe(5)
 })

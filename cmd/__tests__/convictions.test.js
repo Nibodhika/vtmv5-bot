@@ -34,6 +34,22 @@ test('convictions', () => {
 
     check_cmd(author, `!convictions ${author.name} a wrong:wrong`,
               `You can't do that`)
+
+    check_cmd(author, `!convictions ${author.name} a`,
+              "add what?",
+              true)
+
+    check_cmd(author, `!convictions ${author.name} r`,
+              "remove what?",
+              true)
+
+    check_cmd(author, `!convictions ${author.name} wrong`,
+              "Unknown option wrong",
+              true)
+    
+    check_cmd(author, `!convictions ${author.name} a wrong wrong`,
+              "Give me <conviction>:<touchstone>",
+              true)
     
     var conviction = "The innocents should be spared"
     var touchstone = "Billy, the vampire son"

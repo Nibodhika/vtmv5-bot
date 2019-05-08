@@ -45,8 +45,9 @@ FOREIGN KEY(character) REFERENCES character(id) ON DELETE CASCADE
     }
 
     function set(character_id, advantage, points, specification=null){
-        // TODO check if advantage exists
-        do_set.run(advantage,points,specification,character_id)
+        if(advantage in rules.advantages){
+            do_set.run(advantage,points,specification,character_id)            
+        }
     }
 
     function save(character_id, dict){

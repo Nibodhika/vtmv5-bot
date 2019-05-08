@@ -6,12 +6,6 @@ module.exports = function character_cmd(msg, args) {
     var who = msg.author;
     if(args.length > 1){
         who = args[1];
-        // Why?
-        if(who === 'null')
-            who = null
-        // allow me to mean me
-        else if(who == 'me')
-            who = msg.author
     }
 
     var character = Character.find(who);
@@ -49,12 +43,12 @@ module.exports = function character_cmd(msg, args) {
         }
         else {
             var option = args[2];
-            // TODO
             if(['a', 'add'].indexOf(option) > -1) {
                 if(args.length > 3){
                     var what = args.slice(3).join(' ').split(':');
                     if(what.length != 2){
                         msg.reply("Give me <conviction>:<touchstone>")
+                        return
                     }
                     var conviction = what[0]
                     var touchstone = what[1]
@@ -74,6 +68,9 @@ module.exports = function character_cmd(msg, args) {
                 else{
                     msg.reply("remove what?");
                 }
+            }
+            else{
+                msg.reply("Unknown option " + option)
             }
         }
     }

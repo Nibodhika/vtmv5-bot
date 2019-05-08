@@ -40,6 +40,18 @@ test('specialties', () => {
     check_cmd(author, `!specialties ${author.name} a wrong:wrong`,
               `You can't do that`)
 
+    check_cmd(author, `!specialties ${author.name} a`,
+              "add what?",
+              true)
+
+    check_cmd(author, `!specialties ${author.name} r`,
+              "remove what?",
+              true)
+
+    check_cmd(author, `!specialties ${author.name} a wrong wrong`,
+              "Give me <skill>:<specialty>",
+             true)
+
     check_cmd(author, `!specialties ${author.name} a brawl:whatever`,
               `Character ${character.sheet.name} doesn't have the skill brawl, so you can't pick a specialty for it`,
                   true)

@@ -91,6 +91,10 @@ test('frenzy', () => {
                   }})
 
 
+    check_cmd(author,'!frenzy wrong', [],
+              "Difficulty 'wrong' is not an integer")
+              
+    
     character.sheet.w_aggravated = 0
     character.save()
     // Testing a frenzy with different difficulty

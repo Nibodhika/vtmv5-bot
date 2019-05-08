@@ -6,12 +6,6 @@ module.exports = function character_cmd(msg, args) {
     var who = msg.author;
     if(args.length > 1){
         who = args[1];
-        // Why?
-        if(who === 'null')
-            who = null
-        // allow me to mean me
-        else if(who == 'me')
-            who = msg.author
     }
 
     var character = Character.find(who);
@@ -57,6 +51,7 @@ module.exports = function character_cmd(msg, args) {
                     var what = args.slice(3).join(' ').split(':');
                     if(what.length < 2){
                         msg.reply("Give me <skill>:<specialty>")
+                        return
                     }
                     var skill = what[0]
                     var specialty = what[1]

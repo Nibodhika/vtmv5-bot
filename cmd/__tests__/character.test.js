@@ -72,6 +72,14 @@ test('character', () => {
     check_set_sheet('ambition', 'this is an example with spaces', '')
 
 
+    // Check add without parameter
+    check_cmd(author, `!character ${author.name} a`,
+              "add what?",
+              true)
+    // Check add invalid advantage
+    check_cmd(author, `!character ${author.name} a wrong`,
+              "wrong is neither an advantage nor a thin blood advantage",
+              true)
     // Check add specialty with invalid points
     check_cmd(author, `!character ${author.name} a iliterate 1`,
                   `1 is not a valid number of points for iliterate`,
@@ -139,6 +147,11 @@ test('character', () => {
     check_add_thin_blood_adv('camarilla_contact', 'the prince')
 
 
+    // Check remove without parameter
+    check_cmd(author, `!character ${author.name} r`,
+              "remove what?",
+              true)
+    // Check remove with wrong parameter
     check_cmd(author, `!character ${author.name} r wrong`,
               `wrong is neither an advantage nor a thin blood advantage`,
               true)

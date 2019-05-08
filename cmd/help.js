@@ -24,7 +24,7 @@ var help_str = `Valid commands are:
     Does a frenzy test
 !create
     Starts the character creation in a DM
-!humanity [who=author] [option] [value]
+!humanity [who=author]
 `
 
 var topics = {
