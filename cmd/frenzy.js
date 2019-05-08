@@ -13,7 +13,7 @@ module.exports = function(msg, args) {
     }
     
     var third_humanity = Math.floor(character.sheet.humanity / 3)
-    var amount = character.sheet.willpower + third_humanity
+    var amount = character.current_willpower() + third_humanity
     var difficulty = 1
     
     if(args.length > 1){
@@ -38,7 +38,7 @@ module.exports = function(msg, args) {
         }
         else{
             color = 33823
-            title = 'You avoid the frenzy, but take must take a turn to recompose'
+            title = 'You avoid the frenzy, but must take a turn to recompose'
             //description = "You succeed"
         }
     }

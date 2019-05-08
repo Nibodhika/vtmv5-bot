@@ -44,7 +44,7 @@ test('frenzy', () => {
                   embed: {
                       color: 33823,
                       description: "3,4,5,1,6",
-                      title: 'You avoid the frenzy, but take must take a turn to recompose'
+                      title: 'You avoid the frenzy, but must take a turn to recompose'
                   }})
 
 
@@ -59,7 +59,7 @@ test('frenzy', () => {
                   embed: {
                       color: 33823,
                       description: "3,4,5,1,6",
-                      title: 'You avoid the frenzy, but take must take a turn to recompose'
+                      title: 'You avoid the frenzy, but must take a turn to recompose'
                   }})
 
     // Decreasing humanity to 5 should decrease the amount of dice rolled
@@ -76,15 +76,31 @@ test('frenzy', () => {
                       title: 'You avoid the frenzy'
                   }})
 
+    // Having taken damage to willpower should decrease the pool
+    character.sheet.w_superficial = 1
+    character.sheet.w_aggravated = 1
+    character.save()
+    check_cmd(author,
+              '!frenzy',
+              [10,9,5,1,6],
+              {
+                  embed: {
+                      color: 33823,
+                      description: "10,9",
+                      title: 'You avoid the frenzy, but must take a turn to recompose'
+                  }})
 
+
+    character.sheet.w_aggravated = 0
+    character.save()
     // Testing a frenzy with different difficulty
     check_cmd(author,
               '!frenzy 2',
-              [3,4,5,6,7],
+              [3,4,6,7],
               {
                   embed: {
                       color: 16711680,
-                      description: "3,4,5,6", // One success still fails frenzy test
+                      description: "3,4,6", // One success still fails frenzy test
                       title: "You succumb to the frenzy"
                   }})
 
