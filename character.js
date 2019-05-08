@@ -42,6 +42,8 @@ class Character {
             stains: 0,
             blood_potency:0,
             resonance:'',
+            desire:'',
+            ambition:'',
         }
 
         for(var attr in rules.attributes){

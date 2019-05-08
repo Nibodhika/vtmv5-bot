@@ -15,6 +15,8 @@ clan TEXT,
 generation INTEGER,
 resonance TEXT,
 blood_potency INTEGER DEFAULT 0 CHECK( blood_potency >= 0 AND blood_potency <= 10),
+desire TEXT,
+ambition TEXT,
 `
 
     CREATE += '-- Attributes\n'
@@ -53,7 +55,7 @@ stains INTEGER DEFAULT 0)`
     var INSERT = 'INSERT INTO character(name,player) VALUES(?,?)'
     const insert = db.prepare(INSERT)
     
-    var SAVE = 'UPDATE character SET name=@name, player=@player, concept=@concept, predator=@predator, sire=@sire, clan=@clan, generation=@generation, resonance=@resonance, '
+    var SAVE = 'UPDATE character SET name=@name, player=@player, concept=@concept, predator=@predator, sire=@sire, clan=@clan, generation=@generation, resonance=@resonance,desire=@desire,ambition=@ambition, '
     for(var attr in rules.attributes){
         SAVE += `${attr}=@${attr}, `
     }

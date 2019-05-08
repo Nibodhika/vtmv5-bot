@@ -23,6 +23,10 @@ function print_status(character) {
     var life_bar = build_life_bar(character.sheet)
     var fields = [
         {
+            name: `Desire`,
+            value: dash_on_empty(character.sheet.desire)
+        },
+        {
             name: `Humanity ${character.sheet.humanity}/${10-character.sheet.humanity-character.sheet.stains}/${character.sheet.stains}`,
             value: build_humanity_bar(character.sheet)
         },
@@ -56,6 +60,10 @@ function print_status(character) {
 function print_sheet(character) {
 
     var general_fields = [
+        {
+            name: `Ambition`,
+            value: dash_on_empty(character.sheet.ambition)
+        },
         {
             name: 'Player',
             value: dash_on_empty(character.sheet.player),

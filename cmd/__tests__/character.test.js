@@ -68,6 +68,9 @@ test('character', () => {
     // check set random attributes that uses strings
     check_set_sheet('clan', 'brujah', '')
 
+    // check set string with spaces
+    check_set_sheet('ambition', 'this is an example with spaces', '')
+
 
     // Check add specialty with invalid points
     check_cmd(author, `!character ${author.name} a iliterate 1`,

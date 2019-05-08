@@ -23,6 +23,8 @@ function create_and_save_character(name){
         humanity: 8,
         stains: 9,
         blood_potency: 0,
+        desire:'my desire',
+        ambition: 'my ambition',
     }
     for(var attr in rules.attributes){
         character[attr] = 1;

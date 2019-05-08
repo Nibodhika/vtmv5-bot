@@ -46,7 +46,7 @@ module.exports = function character_cmd(msg, args) {
             else if(['s', 'set'].indexOf(option) > -1){
                 if(args.length > 4){
                     var what = args[3];
-                    var value = args[4];
+                    var value = args.slice(4).join(' ')
                     var error = character.set(what, value)
                     msg.reply(error)
                 }
