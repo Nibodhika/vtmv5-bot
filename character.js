@@ -109,6 +109,10 @@ class Character {
     }
 
     get(what){
+        if(['willpower', 'will'].indexOf(what) > -1){
+            return this.current_willpower()
+        }
+
         if(what in this.sheet){
             return this.sheet[what]
         }

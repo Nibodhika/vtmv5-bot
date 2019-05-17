@@ -54,16 +54,23 @@ test('Create save and find a character', () => {
 test('Get attr skill and discipline', () => {
     var character = new Character('attr_skill_dis_test', 'attr_skill_dis_test player')
     character.sheet.strength = 3
-    character.sheet.brawl = 4
-    character.sheet.potence = 2
-
     expect(character.get('strength')).toBe(3)
     expect(character.get('str')).toBe(3)
 
+    character.sheet.brawl = 4
     expect(character.get('brawl')).toBe(4)
     expect(character.get('bra')).toBe(4)
 
+    character.sheet.potence = 2
     expect(character.get('potence')).toBe(2)
+
+    character.sheet.willpower = 5
+    expect(character.get('willpower')).toBe(5)
+    expect(character.get('will')).toBe(5)
+    character.sheet.w_superficial = 2
+    expect(character.get('willpower')).toBe(3)
+    character.sheet.w_aggravated = 1
+    expect(character.get('will')).toBe(2)
 })
 
 test('character specialty', () => {

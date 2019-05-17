@@ -173,7 +173,7 @@ function cmd(msg, args) {
             }
         }
     }
-        
+
     if(args.length > 2){
         difficulty = Number(args[2]);
         if(! Number.isInteger(difficulty)){
@@ -198,8 +198,9 @@ function cmd(msg, args) {
         }
     }
 
-    
-
+    // Always minimum 1 dice
+    if(amount < 1)
+        amount = 1
     var all_dice = do_roll(amount)
     // Save roll to database
     database.rolls.set(who,all_dice,difficulty, hunger)
