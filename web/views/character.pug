@@ -1,3 +1,45 @@
 extends ../../node_modules/pug-bootstrap/_bootstrap
+
+mixin row(r1,r2,r3)
+  +badge(r1)
+  ul
+    li #{r1}: #{character[r1]}
+    li #{r2}
+    li #{r3}
+
+mixin coll(name,table)
+  +accordion(name)
+    +accordion-item-danger(name,name,"true")
+      +table([],table,
+              "table-striped table-bordered")
+
 block body
-	h1 #{character.name}
+
+  style.
+    .panel-title {text-align: center};
+        
+  h1 #{character.name}
+  - var foo = character.name
+  h2 foo
+
+  +coll("General",[
+          larst('name', 'concept', 'predator'),
+          larst('player', 'ambition', 'clan'),
+          larst('sire', 'desire', 'generation'),
+          ],"table-striped table-bordered")
+
+  +coll("Attributes",[
+          larst('strength', 'charisma', 'intelligence'),
+          larst('dexterity', 'manipulation', 'wits'),
+          larst('stamina', 'composure', 'resolve'),
+          ],"table-striped table-bordered")
+
+  +coll("Skills", skill_table)
+
+
+  +coll("Disciplines", disciplines_table)
+
+  +coll("Advantages", advantages_table)
+
+  +coll("Thin Blood Advantages", tb_advantages_table)
+  
