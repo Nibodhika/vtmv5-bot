@@ -1,5 +1,5 @@
 const roll = require('./roll')
-const Character = require('../character')
+const Character = require('../models/character')
 const database = require('../database')
 
 module.exports = function(msg, args) {

@@ -1,5 +1,5 @@
 const rules = require('../rules');
-const Character = require('../character')
+const Character = require('../models/character')
 
 var help_str = `Valid commands are:
 !help [topic] [specification]

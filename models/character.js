@@ -1,19 +1,41 @@
-var database = require('./database')
-var rules = require('./rules')
+var database = require('../database')
+var rules = require('../rules')
+
+function build_character_from_row(row, load_sheet=true){
+    if(row == undefined)
+        return undefined;
+
+    var out = new Character(row['name']);
+    out.sheet = row;
+    out.load(load_sheet)
+    return out;
+}
 
 class Character {
 
     static find(player){
-        var row = database.character.find(player)
+        var row = database.character.find_by_player(player)
+        return build_character_from_row(row)
+    }
 
-        if(row == undefined)
+    static get(id){
+        var row = database.character.get(id)
+        return build_character_from_row(row)
+    }
+
+    static all(){
+        var rows = database.character.all()
+        if(rows == undefined)
             return undefined;
-        else{
-            var out = new Character(row['name']);
-            out.sheet = row;
-            out.load()
-            return out;
+
+        var out = []
+        for(var i in rows){
+            var result = rows[i]
+            var character = build_character_from_row(result, false)
+            out.push(character)
         }
+        return out
+
     }
     
     constructor(name, player=null) {
@@ -73,11 +95,14 @@ class Character {
         database.convictions.save(this.sheet.id, this.convictions)
         return true;
     }
-    load(){
-        var row = database.character.get(this.sheet.name);
-        if(row == undefined)
-            return false;
-        this.sheet = row;
+    load(load_sheet=true){
+        if(load_sheet){
+            var row = database.character.find(this.sheet.name);
+            if(row == undefined)
+                return false;
+            this.sheet = row;    
+        }
+        
 
         // Load specialties
         this.specialties = database.specialties.get(this.sheet.id)

@@ -1,7 +1,7 @@
 // Mock to import the in memory database
 jest.setMock('../database', require('../database/db.mock'));
 
-const Character = require('../character')
+const Character = require('../models/character')
 const database = require('../database')
 var rules = require('../rules')
 

@@ -1,6 +1,6 @@
 var database = require('../database')
 const rules = require('../rules');
-const Character = require('../character.js');
+const Character = require('../models/character');
 
 function do_create_character(name, player) {
     var old_character = Character.find(player)

@@ -1,5 +1,5 @@
 var step = require('./steps.js')
-var Character = require('../../character.js')
+var Character = require('../../models/character')
 var rules = require('../../rules')
 
 function base_set(

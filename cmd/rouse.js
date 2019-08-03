@@ -1,4 +1,4 @@
-const Character = require('../character')
+const Character = require('../models/character')
 const roll = require('./roll')
 
 module.exports = function(msg, args){

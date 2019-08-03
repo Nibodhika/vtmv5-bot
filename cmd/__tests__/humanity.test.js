@@ -1,7 +1,7 @@
 jest.setMock('../../database', require('../../database/db.mock'));
 
 const fake = require('../mocks.js')
-const Character = require('../../character')
+const Character = require('../../models/character')
 const humanity_cmd = require('../humanity')
 const rules = require('../../rules')
 

@@ -1,6 +1,6 @@
 var database = require('../../database')
 var rules = require('../../rules')
-var Character = require('../../character.js')
+var Character = require('../../models/character')
 
 var step = require('./steps')
 var first_steps = require('./first_steps')

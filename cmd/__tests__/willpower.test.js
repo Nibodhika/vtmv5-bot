@@ -1,7 +1,7 @@
 jest.setMock('../../database', require('../../database/db.mock'));
 
 const fake = require('../mocks.js')
-const Character = require('../../character')
+const Character = require('../../models/character')
 const willpower_cmd = require('../willpower')
 
 function check_cmd(author, command, expected_answer, as_gm){

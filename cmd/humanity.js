@@ -1,4 +1,4 @@
-var Character = require('../character')
+var Character = require('../models/character')
 var base = require('./character_base')
 var roll = require('./roll')
 var rules = require('../rules')

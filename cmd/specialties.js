@@ -1,5 +1,5 @@
 var helper = require('./character_base.js');
-const Character = require('../character.js');
+const Character = require('../models/character');
 const rules = require('../rules');
 
 module.exports = function character_cmd(msg, args) {

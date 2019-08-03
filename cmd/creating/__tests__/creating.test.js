@@ -5,7 +5,7 @@ var creating = require('../index.js')
 var step = require('../steps')
 var step_msg = require('../step_msg')
 var database = require('../../../database')
-var Character = require('../../../character')
+var Character = require('../../../models/character')
 var rules = require('../../../rules')
 
 var fake = require('../../mocks.js')

@@ -1,6 +1,6 @@
 const database = require('../database')
 const roll = require('./roll')
-const Character = require('../character')
+const Character = require('../models/character')
 
 module.exports = function(msg, args) {
     var who = msg.author;

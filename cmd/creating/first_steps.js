@@ -1,6 +1,6 @@
 var step = require('./steps')
 const rules = require('../../rules');
-var Character = require('../../character.js')
+var Character = require('../../models/character')
 var y_n_question = require('./helpers').y_n_question
 
 function WELCOME(character, content, who) {

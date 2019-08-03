@@ -43,7 +43,7 @@ function create_and_save_character(name){
 test('character save and load', () => {
     var character = create_and_save_character('Database test')
     expect(character.id).not.toBe(undefined);
-    var loaded_character = database.character.get(character.name)
+    var loaded_character = database.character.find(character.name)
     expect(loaded_character).toEqual(character);
 })
 

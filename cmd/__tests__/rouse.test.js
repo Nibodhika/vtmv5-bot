@@ -3,7 +3,7 @@ jest.setMock('../../database', require('../../database/db.mock'));
 const mockRandom = require('jest-mock-random').mockRandom
 
 const database = require('../../database')
-const Character = require('../../character')
+const Character = require('../../models/character')
 const rouse = require('../rouse')
 const fake = require('../mocks')
 

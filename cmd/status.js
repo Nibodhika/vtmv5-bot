@@ -1,5 +1,5 @@
-const Character = require('../character')
-var helper = require('./character_base.js');
+const Character = require('../models/character')
+var helper = require('./character_base');
 
 module.exports = function(msg, args) {
     var who = msg.author

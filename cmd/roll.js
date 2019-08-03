@@ -1,4 +1,4 @@
-const Character = require('../character.js');
+const Character = require('../models/character');
 const database = require('../database')
 
 function do_roll(amount){

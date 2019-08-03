@@ -2,7 +2,7 @@ var step = require('./steps.js')
 var helpers = require('./helpers')
 var specialty_step = helpers.specialty_step
 var discipline_step = helpers.discipline_step
-var Character = require('../../character')
+var Character = require('../../models/character')
 
 function SPECIALTY_ACADEMICS(character,content,who){
     character.add_specialty('academics', content)

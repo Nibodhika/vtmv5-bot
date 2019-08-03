@@ -1,44 +1,8 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
-
 // Import a config file to set the token
 var config = require('./config.json');
 
-// commands
-var commands = require('./cmd')
+var bot = require('./bot')(config);
 
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-});
-
-client.on('message', msg => {
-
-    if (msg.content[0] === '!') {
-        // Remove double spaces
-        var command = msg.content.trim().substring(1).replace(/\s\s+/g, ' ').toLowerCase();
-        // Split the spaces
-        var args = command.split(' ');
-        var cmd = args[0];
-
-        if( Object.keys(commands).indexOf(cmd) > -1){
-
-            if(cmd === 'create'){
-                commands[cmd](msg, true);
-            }
-            else{
-                commands[cmd](msg, args)
-            }
-        }
-        else{
-            msg.reply("\nUnknown command " + cmd +" you can get a list of commands using !help");
-        }
-    }
-    else if(msg.channel.name === undefined && ! msg.author.bot) {
-        commands['create'](msg, false);
-    }
-
-});
-
-
-
-client.login(config.token);
+if(config.web){
+    var Server = require('./web')(config);
+}

@@ -82,17 +82,24 @@ stains INTEGER DEFAULT 0)`
         return character.id
     }
     
-    const load_character = db.prepare(`SELECT * FROM character WHERE name=?`);
-    const find_character = db.prepare(`SELECT * FROM character WHERE player=?`);
-
-    function find(player){
+    
+    const find_player_char = db.prepare(`SELECT * FROM character WHERE player=?`);
+    function find_by_player(player){
         player = String(player);
-        return find_character.get(player);
+        return find_player_char.get(player);
+    }
+    const find_character = db.prepare(`SELECT * FROM character WHERE name=?`);
+    function find(name){
+        return find_character.get(name);
     }
 
-    function load(name){
-        return load_character.get(name);
+    const get_character = db.prepare(`SELECT * FROM character WHERE id=?`);
+    function get(id){
+        id = String(id);
+        return get_character.get(id);
     }
+
+    
 
     const DELETE = `DELETE FROM character WHERE ID=?`
     const delete_character = db.prepare(DELETE);
@@ -100,9 +107,16 @@ stains INTEGER DEFAULT 0)`
         return delete_character.run(character_id)
     }
 
+    const all_characters = db.prepare(`SELECT * from character`);
+    function all(){
+        return all_characters.all();
+    }
+
     return{
+        all: all,
         save: save_character,
-        get: load,
+        get: get,
+        find_by_player: find_by_player,
         find: find,
         delete: del
     }
