@@ -162,10 +162,10 @@ test('character roll', () =>{
     var author = new fake.Author('basic_roll')
     var msg = author.msg("!roll")
     var character = new Character('character_basic_roll', author.name)
-    character.sheet.hunger = 2
-    character.sheet.strength = 3
-    character.sheet.melee = 2
-    character.sheet.potence = 1
+    character.hunger = 2
+    character.strength = 3
+    character.melee = 2
+    character.potence = 1
     character.save()
     
     check_cmd(author,

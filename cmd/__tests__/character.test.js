@@ -41,7 +41,7 @@ test('character', () => {
 
     function check_set_sheet(attr_name, value, expected_before, attr_alias=null){
         character = Character.find(author.name)
-        expect(character.sheet[attr_name]).toBe(expected_before)
+        expect(character[attr_name]).toBe(expected_before)
         if(attr_alias === null)
             attr_alias = attr_name
 
@@ -50,7 +50,7 @@ test('character', () => {
                   true)
 
         character = Character.find(author.name)
-        expect(character.sheet[attr_name]).toBe(value)
+        expect(character[attr_name]).toBe(value)
     }
 
     // set attr by name
@@ -119,7 +119,7 @@ test('character', () => {
 
     // Check add thin_blood adv to non thin_blood character
     check_cmd(author, `!character ${author.name} a baby_teeth`,
-                  `${character.sheet.name} is not thin blood, and can't have thin blood advantages`,
+                  `${character.name} is not thin blood, and can't have thin blood advantages`,
               true)
 
     // Change the clan using the command
@@ -158,9 +158,9 @@ test('character', () => {
     
     function check_remove_adv(advantage, list, expect_fail=false){
         character = Character.find(author.name)
-        var expected_reply = `${character.sheet.name} no longer has ${advantage}`
+        var expected_reply = `${character.name} no longer has ${advantage}`
         if(expect_fail)
-            expected_reply = `${character.sheet.name} doesn't have the advantage ${advantage}`
+            expected_reply = `${character.name} doesn't have the advantage ${advantage}`
 
         // If the advantage is in the character we shouldn't fail
         expect(advantage in character[list]).toBe(! expect_fail)

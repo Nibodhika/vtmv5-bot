@@ -202,14 +202,14 @@ test('rerolling damages willpower', () =>{
     var msg = author.msg("!reroll")
     
     var character = new Character(author.name + ' character', author.name)
-    character.sheet.willpower = 3
+    character.willpower = 3
     character.save()
 
     // this reroll should fail because we didn't had anything to reroll
     reroll_cmd(msg,msg.args())
     // So willpower should still be the same
     character = Character.find(author.name)
-    expect(character.sheet.w_superficial).toBe(0)
+    expect(character.w_superficial).toBe(0)
     // ensure there's something to reroll
     database.rolls.set(author.name, [1,2,3,4,5], 3, 2)
 
@@ -218,16 +218,16 @@ test('rerolling damages willpower', () =>{
     reroll_cmd(msg_wrong,msg_wrong.args())
     // So willpower should still be the same
     character = Character.find(author.name)
-    expect(character.sheet.w_superficial).toBe(0)
+    expect(character.w_superficial).toBe(0)
     
     // Now do a roll that should work
     reroll_cmd(msg,msg.args())
     // Check that the character lost willpower
     character = Character.find(author.name)
-    expect(character.sheet.w_superficial).toBe(1)
+    expect(character.w_superficial).toBe(1)
 
     author.get_replies() // discard previous replies
-    character.sheet.w_superficial = 3
+    character.w_superficial = 3
     character.save()
 
     test_reroll_cmd(author,

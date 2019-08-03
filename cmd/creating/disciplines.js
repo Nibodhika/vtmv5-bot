@@ -4,12 +4,12 @@ var helpers = require('./helpers')
 function set_discipline(character, content, next_step, current_step, value){
     var available_disciplines = helpers.build_character_discipline_list(character)
     if(available_disciplines.indexOf(content) > -1){
-        var current_value = character.sheet[content]
+        var current_value = character[content]
         if(current_value != 0){
             return [current_step,
                     `You already chose that discipline to have ${current_value} dots` ]
         }
-        character.sheet[content] = value;
+        character[content] = value;
         character.save();
         return [next_step]
     }

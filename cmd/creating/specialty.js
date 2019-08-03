@@ -37,7 +37,7 @@ function SPECIALTY(character,content,who){
         return [step.SPECIALTY,
                `Unknown skill ${skill}`]
 
-    if(character.sheet[meant] == 0){
+    if(character[meant] == 0){
         return [step.SPECIALTY,
                `character has 0 points in ${meant}, choose a specialty for a skill he has at least one point`]
     }

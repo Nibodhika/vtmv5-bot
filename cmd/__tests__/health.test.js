@@ -15,9 +15,9 @@ test('health', () => {
              "No health information for " + author.name)
 
     var character = new Character('check_health_character',author.name)
-    character.sheet.health = 7
-    character.sheet.h_superficial = 2
-    character.sheet.h_aggravated = 1
+    character.health = 7
+    character.h_superficial = 2
+    character.h_aggravated = 1
     character.save()
 
     check_cmd(author, '!health',
@@ -63,7 +63,7 @@ test('health', () => {
 [/][/][/][/][/][ ][ ]`,
               true)
     character = Character.find(author.name)
-    expect(character.sheet.h_aggravated).toBe(0)
+    expect(character.h_aggravated).toBe(0)
 
     check_cmd(author, '!health health_cmd_test h 2',
               `health_cmd_test is at 4/7 Health
@@ -85,5 +85,5 @@ test('health', () => {
 [X][ ][ ][ ][ ][ ][ ]`,
               true)
     character = Character.find(author.name)
-    expect(character.sheet.h_superficial).toBe(0)    
+    expect(character.h_superficial).toBe(0)    
 })

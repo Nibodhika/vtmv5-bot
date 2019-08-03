@@ -18,7 +18,7 @@ test('specialties', () => {
               "Could not find a character for " + author.name)
 
     var character = new Character(author.name + ' character', author.name)
-    character.sheet.melee = 2
+    character.melee = 2
     character.save()
 
     expected_reply =  {
@@ -53,14 +53,14 @@ test('specialties', () => {
              true)
 
     check_cmd(author, `!specialties ${author.name} a brawl:whatever`,
-              `Character ${character.sheet.name} doesn't have the skill brawl, so you can't pick a specialty for it`,
+              `Character ${character.name} doesn't have the skill brawl, so you can't pick a specialty for it`,
                   true)
     
     var skill = "melee"
     var specialty = "Knifes"
     var expected_specialty = specialty.toLowerCase()
     check_cmd(author, `!specialties ${author.name} a ${skill}:${specialty}`,
-                  `${character.sheet.name} now has a specialty "${expected_specialty}" for ${skill}`,
+                  `${character.name} now has a specialty "${expected_specialty}" for ${skill}`,
                   true)
 
     character = Character.find(author.name)
@@ -75,11 +75,11 @@ test('specialties', () => {
              )
 
     check_cmd(author, `!specialties ${author.name} r wrong`,
-                  `${character.sheet.name} does not have the "wrong" specialty for any skill`,
+                  `${character.name} does not have the "wrong" specialty for any skill`,
               true)
     
     check_cmd(author, `!specialties ${author.name} r ${specialty}`,
-                  `${character.sheet.name} no longer has the "${expected_specialty}" specialty for ${skill}`,
+                  `${character.name} no longer has the "${expected_specialty}" specialty for ${skill}`,
                   true)
 
     character = Character.find(author.name)

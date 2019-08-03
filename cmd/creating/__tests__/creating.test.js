@@ -55,17 +55,17 @@ test('creation', () => {
     check_step(author,'str',step.ATTRIBUTE_3, `Please select exactly 3 attributes`)
     check_step(author,'dex,str,sta',step.ATTRIBUTE_3, `strength has already been chosen to have 4 dots`)
     var character = Character.find(author);
-    expect(character.sheet.health).toBe(4)
+    expect(character.health).toBe(4)
     check_step(author,'dex,sta,cha',step.ATTRIBUTE_2)
     // Should update the health to 6, because stamina is now 3
     character = Character.find(author);
-    expect(character.sheet.health).toBe(6)
+    expect(character.health).toBe(6)
     var character = Character.find(author);
-    expect(character.sheet.willpower).toBe(2)
+    expect(character.willpower).toBe(2)
     check_step(author,'man,com,int,wits',step.SKILL_DISTRIBUTION)
     // Should have updated willpower to 3, because composure is 2 and resolve is 1
     character = Character.find(author);
-    expect(character.sheet.willpower).toBe(3)
+    expect(character.willpower).toBe(3)
 
     check_step(author,'wrong',step.SKILL_DISTRIBUTION, "wrong is not a valid skill distribution, please select one from the list above")
     check_step(author,'jack of all trades',step.JACK_3)
@@ -143,7 +143,7 @@ test('confirm character deletion', () => {
     // At this point we should be able to find the new character
     character2 = Character.find(author);
     expect(character2).not.toEqual(character)
-    expect(character2.sheet.name).toEqual(new_name)
+    expect(character2.name).toEqual(new_name)
 
     // If we start the creation again, it should show the delete message
     creating(msg, true)

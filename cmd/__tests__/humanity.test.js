@@ -34,7 +34,7 @@ test('humanity', () => {
              `${author.name} is at Humanity 7/3/0
 [X][X][X][X][X][X][X][ ][ ][ ]`)
 
-    character.sheet.stains = 1
+    character.stains = 1
     character.save()
     check_cmd(author, `!humanity ${author.name}`,
               `${author.name} is at Humanity 7/2/1
@@ -66,7 +66,7 @@ test('humanity', () => {
 
     // No willpower damage before
     character = Character.find(author.name)
-    expect(character.sheet.w_aggravated).toBe(0)
+    expect(character.w_aggravated).toBe(0)
     // Suffers stains enough to trigger degeneration
     check_cmd(author, `!humanity ${author.name} stains 3`,
               `${author.name} has suffer degeneration and taken 2 point(s) of aggravated willpower damage and is now Impaired (page 239)
@@ -76,7 +76,7 @@ Humanity 7/0/3
              )
     // Now it has aggravated willpower damage
     character = Character.find(author.name)
-    expect(character.sheet.w_aggravated).toBe(2)
+    expect(character.w_aggravated).toBe(2)
 
     
     // Remorse
@@ -86,8 +86,8 @@ Humanity 7/0/3
                    true)
     // It should have stayed at humanity 7 and now have no stains
     character = Character.find(author.name)
-    expect(character.sheet.humanity).toBe(7)
-    expect(character.sheet.stains).toBe(0)
+    expect(character.humanity).toBe(7)
+    expect(character.stains).toBe(0)
 
 
     // Remorse without stains is not needed
@@ -97,7 +97,7 @@ Humanity 7/0/3
                   true)
 
     // Failed remorse check
-    character.sheet.stains = 1
+    character.stains = 1
     character.save()
     var expected_reply = `${author.name} failed his remorse check and is now at Humanity 6\nDice: 1,2\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(6)}`
     dice_cmd_check(author, `!humanity ${author.name} remorse`,
@@ -105,10 +105,10 @@ Humanity 7/0/3
                    expected_reply,
                    true)
     character = Character.find(author.name)
-    expect(character.sheet.stains).toBe(0)
-    expect(character.sheet.humanity).toBe(6)
+    expect(character.stains).toBe(0)
+    expect(character.humanity).toBe(6)
 
-    character.sheet.stains = 4
+    character.stains = 4
     character.save()
 
     expected_reply = `${author.name} rationalizes the monster he's become and is now at Humanity 5 and no longer Impaired\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(5)}`

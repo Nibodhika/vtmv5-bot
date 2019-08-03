@@ -32,7 +32,7 @@ module.exports = function character_cmd(msg, args) {
                 if(args.length > 3){
                     var name = args.slice(3).join(' ')
                     character = helper.do_create_character(name, who);
-                    msg.reply("Created character " + character.sheet.name);
+                    msg.reply("Created character " + character.name);
                 }
                 else
                     msg.reply("Forgot to give the character a name");
@@ -69,8 +69,8 @@ module.exports = function character_cmd(msg, args) {
                     }
 
                     if(is_thin_blood_adv){
-                        if(character.sheet.clan != 'thin_blood'){
-                            msg.reply(`${character.sheet.name} is not thin blood, and can't have thin blood advantages`)
+                        if(character.clan != 'thin_blood'){
+                            msg.reply(`${character.name} is not thin blood, and can't have thin blood advantages`)
                             return 1
                         }
                         

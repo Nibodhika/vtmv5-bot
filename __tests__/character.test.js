@@ -11,10 +11,10 @@ test('find should fail if player does not have a character', () => {
 
 test('Create save and find a character', () => {
     var character = new Character('Alucard', 'a player')
-    character.sheet.strength = 3
-    character.sheet.brawl = 4
+    character.strength = 3
+    character.brawl = 4
     character.add_specialty('brawl','martial arts')
-    character.sheet.melee = 3
+    character.melee = 3
     character.add_specialty('melee','knifes')
 
     var out = character.add_advantage('wrong',2)
@@ -46,50 +46,50 @@ test('Create save and find a character', () => {
     var character_loaded = Character.find('a player')
     expect(character_loaded).toEqual(character);
     // If I delete the character it should not find it anymore 
-    database.character.delete(character.sheet.id)
+    database.character.delete(character.id)
     expect(Character.find('a player')).toBe(undefined);
 })
 
 
 test('Get attr skill and discipline', () => {
     var character = new Character('attr_skill_dis_test', 'attr_skill_dis_test player')
-    character.sheet.strength = 3
+    character.strength = 3
     expect(character.get('strength')).toBe(3)
     expect(character.get('str')).toBe(3)
 
-    character.sheet.brawl = 4
+    character.brawl = 4
     expect(character.get('brawl')).toBe(4)
     expect(character.get('bra')).toBe(4)
 
-    character.sheet.potence = 2
+    character.potence = 2
     expect(character.get('potence')).toBe(2)
 
-    character.sheet.willpower = 5
+    character.willpower = 5
     expect(character.get('willpower')).toBe(5)
     expect(character.get('will')).toBe(5)
-    character.sheet.w_superficial = 2
+    character.w_superficial = 2
     expect(character.get('willpower')).toBe(3)
-    character.sheet.w_aggravated = 1
+    character.w_aggravated = 1
     expect(character.get('will')).toBe(2)
 })
 
 test('character specialty', () => {
     var character = new Character('specialty_test', 'specialty_test player')
-    character.sheet.strength = 3
-    character.sheet.brawl = 4
-    character.sheet.potence = 2
+    character.strength = 3
+    character.brawl = 4
+    character.potence = 2
 
     var ret = character.add_specialty('wrong', 'specialty')
     expect(ret).toEqual('Unknown skill wrong')
 
     ret = character.add_specialty('sci', 'specialty name')
-    expect(ret).toEqual(`Character ${character.sheet.name} doesn't have the skill science, so you can't pick a specialty for it`)
+    expect(ret).toEqual(`Character ${character.name} doesn't have the skill science, so you can't pick a specialty for it`)
     
     // If character hasn't been saved yet it should be saved when adding a specialty so it has an id
-    expect(character.sheet.id).toBe(null)
+    expect(character.id).toBe(null)
     ret = character.add_specialty('bra', 'specialty name')
-    expect(character.sheet.id).not.toBe(null)
-    expect(ret).toEqual(character.sheet.name + ' now has a specialty "specialty name" for brawl')
+    expect(character.id).not.toBe(null)
+    expect(ret).toEqual(character.name + ' now has a specialty "specialty name" for brawl')
     // Reload the character and check if it is there
     character = Character.find('specialty_test player')
     expect(character.specialties).toEqual({
@@ -98,21 +98,21 @@ test('character specialty', () => {
 
     // Removing a wrong specialty should return an error
     ret = character.remove_specialty('wrong')
-    expect(ret).toEqual(`${character.sheet.name} does not have the "wrong" specialty for any skill`)
+    expect(ret).toEqual(`${character.name} does not have the "wrong" specialty for any skill`)
 
     // Removing something that actually exists should remove it
     ret = character.remove_specialty('specialty name')
-    expect(ret).toEqual(`${character.sheet.name} no longer has the "specialty name" specialty for brawl`)
+    expect(ret).toEqual(`${character.name} no longer has the "specialty name" specialty for brawl`)
     // Reload the character and check if it's vanished
     character = Character.find('specialty_test player')
     expect(character.specialties).toEqual({})
 })
 
-test('getters for sheet', () => {
+test('getters for elements in sheet', () => {
     var character = new Character('specialty_test', 'specialty_test player')
-    character.sheet.strength = 3
-    character.sheet.brawl = 4
-    character.sheet.potence = 2
+    character.strength = 3
+    character.brawl = 4
+    character.potence = 2
 
     var attributes = character.get_attributes()
     var skills = character.get_skills()

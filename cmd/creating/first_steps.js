@@ -30,16 +30,16 @@ function NAME(character, content, who){
 }
 
 function CONCEPT(character, content, who){
-    character.sheet.concept = content;
+    character.concept = content;
     character.save();
     return [step.CLAN];
 }
 
 function CLAN(character, content, who){
     if(Object.keys(rules.clans).indexOf(content) > -1){
-        character.sheet.clan = content;
+        character.clan = content;
         if(content == 'thin_blood')
-            character.sheet.generation = 14
+            character.generation = 14
         character.save();
         return [step.ATTRIBUTE_4]
     }

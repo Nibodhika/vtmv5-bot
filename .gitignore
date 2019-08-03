@@ -1,5 +1,6 @@
 node_modules/
 coverage/
 vtmv5.db
+sessions
 config.json
 

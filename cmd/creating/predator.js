@@ -5,7 +5,7 @@ module.exports.PREDATOR = function(character,content,who){
     var predator_types = Object.keys(rules.predator_type)
 
     if(predator_types.indexOf(content) > -1){
-        character.sheet.predator = content;
+        character.predator = content;
         character.save()
         return [step.PREDATOR_CHARACTERISTIC_1];
     }
@@ -36,7 +36,7 @@ function ALLEYCAT_2(character,content,who){
 
 function ALLEYCAT_3(character,content,who){
     // TODO add the chosen power to the discipline
-    character.sheet.humanity = character.sheet.humanity -1
+    character.humanity = character.humanity -1
     // TODO add 3 dots of criminal contacts
     return [step.ADVANTAGES_MERIT]
 }
@@ -44,29 +44,29 @@ function ALLEYCAT_3(character,content,who){
 
 
 module.exports.PREDATOR_CHARACTERISTIC_1 = function(character,content,who){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
         return ALLEYCAT_1(character,content,who)
     }
 }
 module.exports.PREDATOR_CHARACTERISTIC_2 = function(character,content,who){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
         return ALLEYCAT_2(character,content,who)
     }
 }
 module.exports.PREDATOR_CHARACTERISTIC_3 = function(character,content,who){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
         return ALLEYCAT_3(character,content,who)
     }
 }
 module.exports.PREDATOR_CHARACTERISTIC_4 = function(character,content,who){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
     }
 }
 module.exports.PREDATOR_CHARACTERISTIC_5 = function(character,content,who){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
     }
 }
 module.exports.PREDATOR_CHARACTERISTIC_6 = function(character,content,who){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
     }    
 }

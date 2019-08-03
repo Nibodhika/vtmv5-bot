@@ -15,9 +15,9 @@ test('willpower', () => {
              "No willpower information for " + author.name)
 
     var character = new Character('check_willpower_character',author.name)
-    character.sheet.willpower = 7
-    character.sheet.w_superficial = 2
-    character.sheet.w_aggravated = 1
+    character.willpower = 7
+    character.w_superficial = 2
+    character.w_aggravated = 1
     character.save()
 
     check_cmd(author, '!willpower',
@@ -63,7 +63,7 @@ test('willpower', () => {
 [/][/][/][/][/][ ][ ]`,
               true)
     character = Character.find(author.name)
-    expect(character.sheet.w_aggravated).toBe(0)
+    expect(character.w_aggravated).toBe(0)
 
     check_cmd(author, '!willpower willpower_cmd_test h 2',
               `willpower_cmd_test is at 4/7 Willpower
@@ -85,6 +85,6 @@ test('willpower', () => {
 [X][ ][ ][ ][ ][ ][ ]`,
               true)
     character = Character.find(author.name)
-    expect(character.sheet.w_superficial).toBe(0)
+    expect(character.w_superficial).toBe(0)
     
 })

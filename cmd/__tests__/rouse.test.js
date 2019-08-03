@@ -22,7 +22,7 @@ test('basic rouse', () =>{
 
     // Create the character
     var character = new Character('character_basic_rouse', author.name)
-    character.sheet.hunger = 2
+    character.hunger = 2
     character.save()
     
     check_cmd(author,
@@ -44,7 +44,7 @@ test('basic rouse', () =>{
 
     // Character should have hunger increased
     character = Character.find(author.name);
-    expect(character.sheet.hunger).toBe(3)
+    expect(character.hunger).toBe(3)
 
 
     // A success should not increase hunger
@@ -67,7 +67,7 @@ test('basic rouse', () =>{
 
     // Character should have the same hunger
     character = Character.find(author.name);
-    expect(character.sheet.hunger).toBe(3)
+    expect(character.hunger).toBe(3)
 
     // Check wrong parameter
     check_cmd(author,
@@ -96,11 +96,11 @@ test('basic rouse', () =>{
 
     // Character should have hunger increased
     character = Character.find(author.name);
-    expect(character.sheet.hunger).toBe(4)
+    expect(character.hunger).toBe(4)
 
     // If the character is at hunger 5 and fails it should frenzy if not thin blood
-    character.sheet.hunger = 5
-    character.sheet.clan = 'thin_blood'
+    character.hunger = 5
+    character.clan = 'thin_blood'
     character.save()
 
     check_cmd(author,
@@ -122,11 +122,11 @@ test('basic rouse', () =>{
 
     // Character should have stayed the same
     character = Character.find(author.name);
-    expect(character.sheet.hunger).toBe(5)
+    expect(character.hunger).toBe(5)
 
 
     // Checking non thin_blood characters
-    character.sheet.clan = 'brujah'
+    character.clan = 'brujah'
     character.save()
 
     check_cmd(author,
@@ -148,5 +148,5 @@ test('basic rouse', () =>{
 
     // Character should have stayed the same
     character = Character.find(author.name);
-    expect(character.sheet.hunger).toBe(5)
+    expect(character.hunger).toBe(5)
 })

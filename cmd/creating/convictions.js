@@ -3,7 +3,7 @@ var database = require('../../database')
 
 module.exports.CONVICTIONS_TOUCHSTONES = function(character,content,who){
     // Start by deleting all advantages in case this is being called a second time
-    database.convictions.delete(character.sheet.id)
+    database.convictions.delete(character.id)
     var convictions = content.split(';')
 
     if(convictions.length > 3)

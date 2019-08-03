@@ -4,7 +4,7 @@ var roll = require('./roll')
 var rules = require('../rules')
 
 function get_output(character){
-    var reply = `Humanity ${character.sheet.humanity}/${10-character.sheet.humanity-character.sheet.stains}/${character.sheet.stains}\n${base.build_humanity_bar(character.sheet)}`
+    var reply = `Humanity ${character.humanity}/${10-character.humanity-character.stains}/${character.stains}\n${base.build_humanity_bar(character)}`
     return reply
 }
 
@@ -53,14 +53,14 @@ module.exports = function(msg, args) {
             
             if(['stains'].indexOf(option) > -1){
                 // Add stains
-                character.sheet.stains += amount
+                character.stains += amount
                 
                 // Check degeneration
-                var free_boxes = 10-character.sheet.humanity-character.sheet.stains
+                var free_boxes = 10-character.humanity-character.stains
                 if(free_boxes < 0){
                     var w_damage = free_boxes * -1
-                    character.sheet.stains = 10-character.sheet.humanity
-                    character.sheet.w_aggravated += w_damage
+                    character.stains = 10-character.humanity
+                    character.w_aggravated += w_damage
                     reply = `${who} has suffer degeneration and taken ${w_damage} point(s) of aggravated willpower damage and is now Impaired (page 239)\n`
                 }
                 else
@@ -70,26 +70,26 @@ module.exports = function(msg, args) {
                 reply += get_output(character)
             }
             else if(['remorse'].indexOf(option) > -1){
-                if(character.sheet.stains == 0){
-                    reply = `No remorse check needed for ${who}\n He stays at Humanity ${character.sheet.humanity}`
+                if(character.stains == 0){
+                    reply = `No remorse check needed for ${who}\n He stays at Humanity ${character.humanity}`
 
                 }
                 else{
                     // Perform remorse check
-                    var free_boxes = 10-character.sheet.humanity-character.sheet.stains
+                    var free_boxes = 10-character.humanity-character.stains
                     if(free_boxes <= 0)
                         free_boxes = 1
                     var dice = roll.do_roll(free_boxes)
                     // This test does not use hunger
                     var result = roll.check_successes(dice,1,0)
                     if(result.success){
-                        character.sheet.stains = 0
-                        reply = `${who} succeeds his remorse check and stays at Humanity ${character.sheet.humanity}\nDice: ${dice}`
+                        character.stains = 0
+                        reply = `${who} succeeds his remorse check and stays at Humanity ${character.humanity}\nDice: ${dice}`
                     }
                     else{
-                        character.sheet.humanity--
-                        character.sheet.stains = 0
-                        reply = `${who} failed his remorse check and is now at Humanity ${character.sheet.humanity}\nDice: ${dice}\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(character.sheet.humanity)}`
+                        character.humanity--
+                        character.stains = 0
+                        reply = `${who} failed his remorse check and is now at Humanity ${character.humanity}\nDice: ${dice}\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(character.humanity)}`
                     }
                     character.save()    
                 }
@@ -97,9 +97,9 @@ module.exports = function(msg, args) {
             }
             else if(['rationalize'].indexOf(option) > -1){
                 // Player rationalizes actions and loses a point in humanity
-                character.sheet.humanity--
-                character.sheet.stains = 0
-                reply = `${who} rationalizes the monster he's become and is now at Humanity ${character.sheet.humanity} and no longer Impaired\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(character.sheet.humanity)}`
+                character.humanity--
+                character.stains = 0
+                reply = `${who} rationalizes the monster he's become and is now at Humanity ${character.humanity} and no longer Impaired\nYour new level of humanity has the following characteristics:${get_humanity_characteristics(character.humanity)}`
                 character.save()
             }
             else{

@@ -143,7 +143,7 @@ function cmd(msg, args) {
     var hunger = 0
 
     if(character != undefined)
-        hunger = character.sheet.hunger;    
+        hunger = character.hunger;    
     
     if(args.length > 1){
         amount = Number(args[1]);

@@ -5,7 +5,7 @@ var y_n_question = require('./helpers').y_n_question
 
 module.exports.ADVANTAGES_MERIT = function(character,content,who){
     // Start by deleting all advantages in case this is being called a second time
-    database.advantages.delete(character.sheet.id)
+    database.advantages.delete(character.id)
     var advantages = content.split(';')
     var total_used_points = 0
     for(var i in advantages){
@@ -65,7 +65,7 @@ module.exports.ADVANTAGES_FLAWS = function(character,content,who){
     for(var adv in character.advantages){
         var advantage = rules.advantages[adv]
         if(advantage.flaw)
-            database.advantages.delete_one(character.sheet.id, adv)
+            database.advantages.delete_one(character.id, adv)
     }
 
     var advantages = content.split(';')
@@ -106,7 +106,7 @@ module.exports.ADVANTAGES_FLAWS = function(character,content,who){
     else if(total_used_points > 2)
         return [step.ADVANTAGES_FLAWS_CONFIRM_OVERSPENT]
 
-    if(character.sheet.clan == 'thin_blood')
+    if(character.clan == 'thin_blood')
         return [step.THIN_BLOOD_MERITS]
     return [step.CONVICTIONS_TOUCHSTONES]
 }
@@ -114,7 +114,7 @@ module.exports.ADVANTAGES_FLAWS = function(character,content,who){
 module.exports.ADVANTAGES_FLAWS_CONFIRM_OVERSPENT = function(character,content,who){
     return y_n_question(content,
                         () => {
-                            if(character.sheet.clan == 'thin_blood')
+                            if(character.clan == 'thin_blood')
                                 return [step.THIN_BLOOD_MERITS]
                             return [step.CONVICTIONS_TOUCHSTONES]
                         },

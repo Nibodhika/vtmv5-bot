@@ -9,11 +9,11 @@ module.exports = function(current_step, character) {
     case step.WELCOME:
         break;
     case step.DELETE_CHARACTER:
-        return `You already have a character named ${character.sheet.name}, proceeding with this will delete it, do you wish to proceed? y/n`
+        return `You already have a character named ${character.name}, proceeding with this will delete it, do you wish to proceed? y/n`
     case step.NAME:
         return "First tell me what's your character name"
     case step.CONCEPT:
-        return `Created character ${character.sheet.name}, you can see his sheet at any point by sending !character
+        return `Created character ${character.name}, you can see his sheet at any point by sending !character
 Now, tell me the core concept for him, type a phrase that succinctly describes your character, e.g. "Corrupt Police" or "Coward investigator"`
     case step.CLAN:
         return clan();
@@ -132,11 +132,11 @@ function skill_distribution(){
 function disciplines_2(character) {
     var reply = ''
     var disciplines = helpers.build_character_discipline_list(character)
-    if(character.sheet.clan == 'thin_blood'){
+    if(character.clan == 'thin_blood'){
         return `This should not have happened, thin blood characters aren't supposed to enter into the discipline step, please report this and the list of commands you gave to get here`
     }
 
-    else if(character.sheet.clan == 'caitiff'){
+    else if(character.clan == 'caitiff'){
         reply = 'Caitiff characters have no intrinsic disciplines, instead they can choose any two disciplines when creating a character, but they cost more xp to evolve later, select one discipline to have 2 dots:\n'
     }
     else{
@@ -157,27 +157,27 @@ function predator(){
 }
 
 function predator_characteristic_1(character){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
         return 'Now choose a specialty, either "intimidation stickups" or "brawl grappling"'
     }
-    return `${character.sheet.predator}: This predator type has not been created yet for step 1`
+    return `${character.predator}: This predator type has not been created yet for step 1`
 }
 
 function predator_characteristic_2(character){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
         return 'Choose a discipline to gain one dot, either "celerity" or "potence"'
     }
-    return `${character.sheet.predator}: This predator type has not been created yet for step 2`
+    return `${character.predator}: This predator type has not been created yet for step 2`
 }
 
 function predator_characteristic_3(character){
-    if(character.sheet.predator == 'alleycat'){
+    if(character.predator == 'alleycat'){
         return 'Pick a power for that discipline. You will lose one dot of humanity and gain three dots of criminal contacts'
     }
     
-    return `${character.sheet.predator}: This predator type has not been created yet for step 3`
+    return `${character.predator}: This predator type has not been created yet for step 3`
 }
 
 function predator_characteristic_4(character){
-    return `${character.sheet.predator}: This predator type has not been created yet for step 4`
+    return `${character.predator}: This predator type has not been created yet for step 4`
 }

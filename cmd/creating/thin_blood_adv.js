@@ -4,7 +4,7 @@ var database = require('../../database')
 
 module.exports.THIN_BLOOD_MERITS = function(character,content,who){
     // Start by deleting all advantages in case this is being called a second time
-    database.thin_blood_adv.delete(character.sheet.id)
+    database.thin_blood_adv.delete(character.id)
 
     var advantages = content.split(';')
     if(advantages.length > 3)
@@ -39,7 +39,7 @@ module.exports.THIN_BLOOD_FLAWS = function(character,content,who){
     for(var adv in character.thin_blood_adv){
         var advantage = rules.thin_blood_adv[adv]
         if(advantage.flaw)
-            database.thin_blood_adv.delete_one(character.sheet.id, adv)
+            database.thin_blood_adv.delete_one(character.id, adv)
         else
             counter +=1
     }

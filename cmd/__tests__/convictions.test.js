@@ -56,7 +56,7 @@ test('convictions', () => {
     var expected_conviction = conviction.toLowerCase()
     var expected_touchstone = touchstone.toLowerCase()
     check_cmd(author, `!convictions ${author.name} a ${conviction}:${touchstone}`,
-                  `${character.sheet.name} now has a conviction ${expected_conviction}`,
+                  `${character.name} now has a conviction ${expected_conviction}`,
                   true)
 
     character = Character.find(author.name)
@@ -81,11 +81,11 @@ test('convictions', () => {
              )
 
     check_cmd(author, `!convictions ${author.name} r wrong`,
-                  `${character.sheet.name} doesn't have the conviction wrong`,
+                  `${character.name} doesn't have the conviction wrong`,
               true)
     
     check_cmd(author, `!convictions ${author.name} r ${conviction}`,
-                  `${character.sheet.name} no longer has the conviction ${expected_conviction}`,
+                  `${character.name} no longer has the conviction ${expected_conviction}`,
                   true)
 
     character = Character.find(author.name)

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS character(
 id INTEGER PRIMARY KEY,
 -- General
 name TEXT UNIQUE NOT NULL,
+-- player INTEGER UNIQUE,
 player TEXT UNIQUE,
 concept TEXT,
 predator TEXT,
@@ -46,15 +47,14 @@ w_superficial INTEGER DEFAULT 0,
 w_aggravated INTEGER DEFAULT 0,
 -- humanity
 humanity INTEGER NOT NULL DEFAULT 0 CHECK( humanity >= 0 AND humanity <= 10),
-stains INTEGER DEFAULT 0)`
+stains INTEGER DEFAULT 0
+-- FOREIGN KEY(player) REFERENCES user(id) ON DELETE SET NULL
+)
+`
 
     
     const create_character_table = db.prepare(CREATE);
     create_character_table.run()
-
-
-    var INSERT = 'INSERT INTO character(name,player) VALUES(?,?)'
-    const insert = db.prepare(INSERT)
     
     var SAVE = 'UPDATE character SET name=@name, player=@player, concept=@concept, predator=@predator, sire=@sire, clan=@clan, generation=@generation, resonance=@resonance,desire=@desire,ambition=@ambition,xp=@xp, '
     for(var attr in rules.attributes){
@@ -73,21 +73,32 @@ stains INTEGER DEFAULT 0)`
         return save_character_prep.run(character);
     });
 
+    const INSERT = db.prepare('INSERT INTO character(name,player) VALUES(?,?)')
     function save_character(character){
         if(character.id === null){
-            var out = insert.run(character.name, character.player)
+            var out = INSERT.run(character.name, character.player)
             character.id = out['lastInsertRowid']
         }
         save_character_transaction(character)
         return character.id
     }
     
-    
-    const find_player_char = db.prepare(`SELECT * FROM character WHERE player=?`);
+
+//     const find_by_handle = db.prepare(`
+// SELECT character.*, user.username,user.discord_handle
+// FROM character
+// INNER JOIN user ON user.id = character.player
+// WHERE user.discord_handle=?`);
+
+    const find_by_handle = db.prepare(`
+SELECT * FROM character
+WHERE player=?`);
+
     function find_by_player(player){
         player = String(player);
-        return find_player_char.get(player);
+        return find_by_handle.get(player);
     }
+    
     const find_character = db.prepare(`SELECT * FROM character WHERE name=?`);
     function find(name){
         return find_character.get(name);

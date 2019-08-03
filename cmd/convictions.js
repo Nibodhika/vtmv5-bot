@@ -2,7 +2,7 @@ var helper = require('./character_base');
 const Character = require('../models/character');
 const rules = require('../rules');
 
-module.exports = function character_cmd(msg, args) {
+module.exports = function(msg, args) {
     var who = msg.author;
     if(args.length > 1){
         who = args[1];

@@ -35,9 +35,9 @@ function base_set(
             return[current_step,
                    `${said} is not a valid ${name}`]
         // Attribute has already been set
-        if(character.sheet[meant] != unset_value)
+        if(character[meant] != unset_value)
             return [ current_step,
-                     `${meant} has already been chosen to have ${character.sheet[meant]} dots`]
+                     `${meant} has already been chosen to have ${character[meant]} dots`]
         // actually apply the changes
         // use set with save set to false to update values of related attributes
         character.set(meant, value,false);
@@ -92,17 +92,17 @@ function build_character_discipline_list(character){
     // Caitiff can choose from any discipline (except thin blood alchemy) at creation
     // Other clans have a set of disciplines they can choose
     var disciplines = []
-    if(character.sheet.clan == 'thin_blood'){
+    if(character.clan == 'thin_blood'){
     }    
-    else if(character.sheet.clan == 'caitiff'){
+    else if(character.clan == 'caitiff'){
         for(var discipline in rules.disciplines){
             if(['thin_blood_alchemy', 'blood_sorcery'].indexOf(discipline) == -1)
                 disciplines.push(discipline)
         }
     }
     else{
-        for(var i in rules.clans[character.sheet.clan].disciplines)
-            disciplines.push(rules.clans[character.sheet.clan].disciplines[i])
+        for(var i in rules.clans[character.clan].disciplines)
+            disciplines.push(rules.clans[character.clan].disciplines[i])
     }
     return disciplines
 }
@@ -116,19 +116,19 @@ module.exports.skill_distributions = [
 function specialty_step(character, next_step=step.SPECIALTY_ACADEMICS){
 
     if(next_step == step.SPECIALTY_ACADEMICS){
-        if(character.sheet.academics == 0)
+        if(character.academics == 0)
             return specialty_step(character, step.SPECIALTY_CRAFT)
     }
     else if(next_step == step.SPECIALTY_CRAFT){
-        if(character.sheet.craft == 0)
+        if(character.craft == 0)
             return specialty_step(character, step.SPECIALTY_PERFORMANCE)
     }
     else if(next_step == step.SPECIALTY_PERFORMANCE){
-        if(character.sheet.performance == 0)
+        if(character.performance == 0)
             return specialty_step(character, step.SPECIALTY_SCIENCE)
     }
     else if(next_step == step.SPECIALTY_SCIENCE){
-        if(character.sheet.science == 0)
+        if(character.science == 0)
             return step.SPECIALTY
     }
 
@@ -137,7 +137,7 @@ function specialty_step(character, next_step=step.SPECIALTY_ACADEMICS){
 
 function discipline_step(character){
     //Returns the first discipline step if the character has it, otherwise the next step
-    if(character.sheet.clan == 'thin_blood'){
+    if(character.clan == 'thin_blood'){
         // Thin blood don't have either disciplines nor predator type
         return step.ADVANTAGES_MERIT
     }

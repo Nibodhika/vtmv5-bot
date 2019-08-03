@@ -19,8 +19,8 @@ test('frenzy', () => {
 
     // Create the character
     var character = new Character('frenzy_cmd_test_char', author.name)
-    character.sheet.willpower = 2
-    character.sheet.humanity = 7
+    character.willpower = 2
+    character.humanity = 7
     character.save()
 
     check_cmd(author,
@@ -34,7 +34,7 @@ test('frenzy', () => {
                   }})
 
     // More willpower should increase the dice rolled by 1
-    character.sheet.willpower = 3
+    character.willpower = 3
     character.save()
 
     check_cmd(author,
@@ -49,7 +49,7 @@ test('frenzy', () => {
 
 
     // Humanity should be divideb by 3 and rounded down, so humanity 6 should still roll the same amount of dice
-    character.sheet.humanity = 6
+    character.humanity = 6
     character.save()
 
     check_cmd(author,
@@ -63,7 +63,7 @@ test('frenzy', () => {
                   }})
 
     // Decreasing humanity to 5 should decrease the amount of dice rolled
-    character.sheet.humanity = 5
+    character.humanity = 5
     character.save()
 
     check_cmd(author,
@@ -77,8 +77,8 @@ test('frenzy', () => {
                   }})
 
     // Having taken damage to willpower should decrease the pool
-    character.sheet.w_superficial = 1
-    character.sheet.w_aggravated = 1
+    character.w_superficial = 1
+    character.w_aggravated = 1
     character.save()
     check_cmd(author,
               '!frenzy',
@@ -95,7 +95,7 @@ test('frenzy', () => {
               "Difficulty 'wrong' is not an integer")
               
     
-    character.sheet.w_aggravated = 0
+    character.w_aggravated = 0
     character.save()
     // Testing a frenzy with different difficulty
     check_cmd(author,

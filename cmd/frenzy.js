@@ -12,7 +12,7 @@ module.exports = function(msg, args) {
         return 1
     }
     
-    var third_humanity = Math.floor(character.sheet.humanity / 3)
+    var third_humanity = Math.floor(character.humanity / 3)
     var amount = character.current_willpower() + third_humanity
     var difficulty = 1
     

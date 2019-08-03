@@ -6,7 +6,9 @@ function build_character_from_row(row, load_sheet=true){
         return undefined;
 
     var out = new Character(row['name']);
-    out.sheet = row;
+    for(var key in row){
+        out[key] = row[key]
+    }
     out.load(load_sheet)
     return out;
 }
@@ -42,41 +44,41 @@ class Character {
         if(player != null)
             player = String(player)
 
-        this.sheet = {
-            id: null,
-            name: name,
-            player: player,
-            concept: '',
-            predator: '',
-            sire: '',
-            clan: '',
-            generation: 13,
+
+        this.id = null;
+        this.name = name;
+        this.player = player;
+        this.concept = '';
+        this.predator = '';
+        this.sire = '';
+        this.clan = '';
+        this.generation = 13;
 
 
-            hunger: 1,
-            health: 4,
-            h_superficial: 0,
-            h_aggravated: 0,
-            willpower: 2,
-            w_superficial: 0,
-            w_aggravated: 0,
-            humanity: 7,
-            stains: 0,
-            blood_potency:0,
-            resonance:'',
-            desire:'',
-            ambition:'',
-            xp:0,
-        }
+        this.hunger = 1;
+        this.health = 4;
+        this.h_superficial = 0;
+        this.h_aggravated = 0;
+        this.willpower = 2;
+        this.w_superficial = 0;
+        this.w_aggravated = 0;
+        this.humanity = 7;
+        this.stains = 0;
+        this.blood_potency =0;
+        this.resonance ='';
+        this.desire ='';
+        this.ambition ='';
+        this.xp =0;
+
 
         for(var attr in rules.attributes){
-            this.sheet[attr] = 1;
+            this[attr] = 1;
         }
         for(var skill in rules.skills){
-            this.sheet[skill] = 0;
+            this[skill] = 0;
         }
         for(var discipline in rules.disciplines){
-            this.sheet[discipline] = 0;
+            this[discipline] = 0;
         }
 
         this.specialties = {}
@@ -87,32 +89,40 @@ class Character {
     }
 
     save(){
-        this.sheet.id = database.character.save(this.sheet);
-        database.specialties.save(this.sheet.id, this.specialties)
-        database.powers.save(this.sheet.id, this.powers)
-        database.advantages.save(this.sheet.id, this.advantages)
-        database.thin_blood_adv.save(this.sheet.id, this.thin_blood_adv)
-        database.convictions.save(this.sheet.id, this.convictions)
+        // Database requires a dict and not an object
+        var sheet = {}
+        for(var key in this){
+            sheet[key] = this[key]
+        }
+        this.id = database.character.save(sheet);
+        
+        database.specialties.save(this.id, this.specialties)
+        database.powers.save(this.id, this.powers)
+        database.advantages.save(this.id, this.advantages)
+        database.thin_blood_adv.save(this.id, this.thin_blood_adv)
+        database.convictions.save(this.id, this.convictions)
         return true;
     }
     load(load_sheet=true){
         if(load_sheet){
-            var row = database.character.find(this.sheet.name);
+            var row = database.character.find(this.name);
             if(row == undefined)
                 return false;
-            this.sheet = row;    
+            for(var key in row){
+                this[key] = row[key]
+            }
         }
         
 
         // Load specialties
-        this.specialties = database.specialties.get(this.sheet.id)
+        this.specialties = database.specialties.get(this.id)
         //Load powers
-        this.powers = database.powers.get(this.sheet.id)
+        this.powers = database.powers.get(this.id)
         //Load advantages
-        this.advantages = database.advantages.get(this.sheet.id)
-        this.thin_blood_adv = database.thin_blood_adv.get(this.sheet.id)
+        this.advantages = database.advantages.get(this.id)
+        this.thin_blood_adv = database.thin_blood_adv.get(this.id)
 
-        this.convictions = database.convictions.get(this.sheet.id)
+        this.convictions = database.convictions.get(this.id)
         return true;
     }
 
@@ -138,8 +148,8 @@ class Character {
             return this.current_willpower()
         }
 
-        if(what in this.sheet){
-            return this.sheet[what]
+        if(what in this){
+            return this[what]
         }
         
         var meant = Character.unalias_attr(what)
@@ -149,12 +159,12 @@ class Character {
 
         if(meant === undefined)
             return undefined
-        return this.sheet[meant]
+        return this[meant]
     }
     
     set(what, value,save=true){
         var meant = undefined
-        if(what in this.sheet)
+        if(what in this)
             meant = what
         else{
             meant = Character.unalias_attr(what)
@@ -165,25 +175,25 @@ class Character {
             }    
         }
 
-        if(typeof this.sheet[meant] === 'number'){
+        if(typeof this[meant] === 'number'){
             value = Number(value)
             if(value === NaN)
                 return value+" is not a number";
         }
-        this.sheet[meant] = value;
+        this[meant] = value;
 
         //Stamina influences health
         if(meant == 'stamina'){
-            this.sheet.health = value + 3;
+            this.health = value + 3;
         }
         // willpower = composure + resolve
         else if(['composure', 'resolve'].indexOf(meant) > -1){
-            this.sheet.willpower = this.sheet.composure + this.sheet.resolve;
+            this.willpower = this.composure + this.resolve;
         }
 
         if(save)
             this.save()
-        return `${this.sheet.name} now has ${this.sheet[meant]} ${meant}`
+        return `${this.name} now has ${this[meant]} ${meant}`
     }
 
     _get_attr_skill_list(dict){
@@ -196,11 +206,11 @@ class Character {
         for(var elem in dict){
             var element = dict[elem]
             if(element.type == 'physical')
-                out.physical[elem] = this.sheet[elem]
+                out.physical[elem] = this[elem]
             else if(element.type == 'social')
-                out.social[elem] = this.sheet[elem]
+                out.social[elem] = this[elem]
             else
-                out.mental[elem] = this.sheet[elem]
+                out.mental[elem] = this[elem]
         }
         return out;
     }
@@ -219,18 +229,18 @@ class Character {
             return `Unknown skill ` + skill
         }
 
-        if(this.sheet[meant] > 0){
-            if(this.sheet.id == null)
+        if(this[meant] > 0){
+            if(this.id == null)
                 this.save()
-            database.specialties.set(this.sheet.id,specialty, meant)
+            database.specialties.set(this.id,specialty, meant)
             if(!(meant in this.specialties)){
                 this.specialties[meant] = []
             }
             this.specialties[meant].push(specialty)
-            return `${this.sheet.name} now has a specialty "${specialty}" for ${meant}`
+            return `${this.name} now has a specialty "${specialty}" for ${meant}`
         }
         
-        return `Character ${this.sheet.name} doesn't have the skill ${meant}, so you can't pick a specialty for it`
+        return `Character ${this.name} doesn't have the skill ${meant}, so you can't pick a specialty for it`
     }
     remove_specialty(specialty){
         var skill = undefined
@@ -245,13 +255,13 @@ class Character {
         }
 
         if(skill === undefined){
-            return `${this.sheet.name} does not have the "${specialty}" specialty for any skill`
+            return `${this.name} does not have the "${specialty}" specialty for any skill`
         }
 
         this.specialties[skill].splice(index, 1)
-        database.specialties.delete_one(this.sheet.id,specialty)
+        database.specialties.delete_one(this.id,specialty)
         
-        return `${this.sheet.name} no longer has the "${specialty}" specialty for ${skill}`
+        return `${this.name} no longer has the "${specialty}" specialty for ${skill}`
 
     }
 
@@ -265,80 +275,80 @@ class Character {
 
             // Character already had the advantage, should delete from database
             if(advantage in this.advantages){
-                database.advantages.delete_one(this.sheet.id,advantage)
+                database.advantages.delete_one(this.id,advantage)
             }
             this.advantages[advantage] = {
                 points: points,
                 specification: specification
             }
-            database.advantages.set(this.sheet.id, advantage, points, specification)
-            return `${this.sheet.name} now has advantage ${advantage} with ${points} points`
+            database.advantages.set(this.id, advantage, points, specification)
+            return `${this.name} now has advantage ${advantage} with ${points} points`
         }
         return `${advantage} is not a real advantage.`
     }
     remove_advantage(advantage){
         if( ! (advantage in this.advantages)){
-            return `${this.sheet.name} doesn't have the advantage ${advantage}`
+            return `${this.name} doesn't have the advantage ${advantage}`
         }
-        database.advantages.delete_one(this.sheet.id,advantage)
+        database.advantages.delete_one(this.id,advantage)
         delete this.advantages[advantage]
-        return `${this.sheet.name} no longer has ${advantage}`
+        return `${this.name} no longer has ${advantage}`
     }
 
     add_thin_blood_adv(advantage, specification = ""){
         if(advantage in rules.thin_blood_adv){
             // Character already had the advantage, delete from database
             if(advantage in this.advantages){
-                database.thin_blood_adv.delete_one(this.sheet.id,advantage)
+                database.thin_blood_adv.delete_one(this.id,advantage)
             }
             this.thin_blood_adv[advantage] = specification
-            database.thin_blood_adv.set(this.sheet.id, advantage, specification)
-            return `${this.sheet.name} now has advantage ${advantage}`
+            database.thin_blood_adv.set(this.id, advantage, specification)
+            return `${this.name} now has advantage ${advantage}`
         }
         return `${advantage} is not a real thin blood advantage.`
     }
     remove_thin_blood_adv(advantage){
         if( ! (advantage in this.thin_blood_adv)){
-            return `${this.sheet.name} doesn't have the advantage ${advantage}`
+            return `${this.name} doesn't have the advantage ${advantage}`
         }
-        database.thin_blood_adv.delete_one(this.sheet.id,advantage)
+        database.thin_blood_adv.delete_one(this.id,advantage)
         delete this.thin_blood_adv[advantage]
-        return `${this.sheet.name} no longer has ${advantage}`
+        return `${this.name} no longer has ${advantage}`
     }
 
     add_conviction(conviction, touchstone){
 
         if(conviction in this.convictions){
             // Probably changing touchstone
-            database.convictions.delete_one(this.sheet.id,conviction)
+            database.convictions.delete_one(this.id,conviction)
         }
         
         this.convictions[conviction] = touchstone
-        database.convictions.set(this.sheet.id, conviction,touchstone)
-        return `${this.sheet.name} now has a conviction ${conviction}`
+        database.convictions.set(this.id, conviction,touchstone)
+        return `${this.name} now has a conviction ${conviction}`
     }
     remove_conviction(conviction){
         if( ! (conviction in this.convictions)){
-            return `${this.sheet.name} doesn't have the conviction ${conviction}`
+            return `${this.name} doesn't have the conviction ${conviction}`
         }
-        database.convictions.delete_one(this.sheet.id,conviction)
-        return `${this.sheet.name} no longer has the conviction ${conviction}`
+        database.convictions.delete_one(this.id,conviction)
+        return `${this.name} no longer has the conviction ${conviction}`
     }
 
 
     get_health() {
-        var current_health = this.sheet.health - this.sheet.h_aggravated - this.sheet.h_superficial;
-        return `${current_health}/${this.sheet.health} ${this.sheet.h_aggravated}|${this.sheet.h_superficial}`
+        var current_health = this.health - this.h_aggravated - this.h_superficial;
+        return `${current_health}/${this.health} ${this.h_aggravated}|${this.h_superficial}`
     }
 
     delete_from_database(){
-        database.powers.delete(this.sheet.id)
-        database.specialties.delete(this.sheet.id)
-        database.character.delete(this.sheet.id)
+        database.powers.delete(this.id)
+        database.specialties.delete(this.id)
+        database.character.delete(this.id)
     }
 
     current_willpower(){
-        return this.sheet.willpower - this.sheet.w_aggravated - this.sheet.w_superficial
+        return this.willpower - this.w_aggravated - this.w_superficial
     }
 }
 

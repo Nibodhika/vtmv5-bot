@@ -5,7 +5,7 @@ const Character = require('../models/character');
 function do_create_character(name, player) {
     var old_character = Character.find(player)
     if(old_character != undefined)
-        database.character.delete(old_character.sheet.id)
+        database.character.delete(old_character.id)
     var character = new Character(name, player);
     character.save()
     return character;
@@ -19,20 +19,20 @@ function dash_on_empty(variable){
 }
 
 function print_status(character) {
-    var willpower_bar = build_willpower_bar(character.sheet)
-    var life_bar = build_life_bar(character.sheet)
+    var willpower_bar = build_willpower_bar(character)
+    var life_bar = build_life_bar(character)
     var fields = [
         {
             name: `Desire`,
-            value: dash_on_empty(character.sheet.desire)
+            value: dash_on_empty(character.desire)
         },
         {
-            name: `Humanity ${character.sheet.humanity}/${10-character.sheet.humanity-character.sheet.stains}/${character.sheet.stains}`,
-            value: build_humanity_bar(character.sheet)
+            name: `Humanity ${character.humanity}/${10-character.humanity-character.stains}/${character.stains}`,
+            value: build_humanity_bar(character)
         },
         {
             name: 'Resonance',
-            value: dash_on_empty(character.sheet.resonance)
+            value: dash_on_empty(character.resonance)
         },
         {
             name: `Willpower ${willpower_bar.remaining}/${willpower_bar.life}`,
@@ -44,15 +44,15 @@ function print_status(character) {
         },
         {
             name: 'Hunger',
-            value: `${character.sheet.hunger}`
+            value: `${character.hunger}`
         },
     ]
 
 
     return {
         embed: {
-            title: character.sheet.name,
-            description: character.sheet.player,
+            title: character.name,
+            description: character.player,
             fields: fields
         }}
 }
@@ -62,21 +62,21 @@ function print_sheet(character) {
     var general_fields = [
         {
             name: `Ambition`,
-            value: dash_on_empty(character.sheet.ambition)
+            value: dash_on_empty(character.ambition)
         },
         {
             name: 'Player',
-            value: dash_on_empty(character.sheet.player),
+            value: dash_on_empty(character.player),
             inline: true
         },
         {
             name: 'Clan',
-            value: dash_on_empty(character.sheet.clan),
+            value: dash_on_empty(character.clan),
             inline: true
         },
         {
             name: 'Generation',
-            value: dash_on_empty(character.sheet.generation),
+            value: dash_on_empty(character.generation),
             inline: true
         }
     ]
@@ -146,9 +146,9 @@ function print_sheet(character) {
     ]
     var disciplines = ""
     for(var discipline in rules.disciplines){
-        if(character.sheet[discipline] > 0){
+        if(character[discipline] > 0){
             disciplines_field.push({
-                name: `${discipline}: ${character.sheet[discipline]}`,
+                name: `${discipline}: ${character[discipline]}`,
                 inline: true,
                 value: "-" // TODO list the powers for this discipline
             })
@@ -190,7 +190,7 @@ ${dash_on_empty(advantage.specification)}`
             value: dash_on_empty(flaws)
     })
 
-    if(character.sheet.clan == 'thin_blood'){
+    if(character.clan == 'thin_blood'){
         var thin_blood_adv = ""
         for(var adv in character.thin_blood_adv){
             var specification = character.thin_blood_adv[adv]
@@ -213,14 +213,14 @@ ${dash_on_empty(specification)}`
 
     return {
         embed: {
-            title: character.sheet.name,
-            description: character.sheet.concept,
+            title: character.name,
+            description: character.concept,
             fields: fields
     }}
 }
 
 function build_bar(character_sheet, which){
-    // Notice this should receive character.sheet
+    // Notice this should receive character
     var letter = which[0]
     var superficial = character_sheet[letter+'_superficial']
     var aggravated = character_sheet[letter+'_aggravated']
