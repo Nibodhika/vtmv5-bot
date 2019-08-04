@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navbar, Alert, Button, Modal, Form, Dropdown, DropdownButton } from 'react-bootstrap';
+import {Navbar, Nav, Alert, Button, Modal, Form, Dropdown, DropdownButton } from 'react-bootstrap';
 
 
 class MainBar extends React.Component {
@@ -70,14 +70,7 @@ class MainBar extends React.Component {
                     onClick={this.handleLogout} >
                     Logout</Dropdown.Item>
 
-                </DropdownButton>
-            // <Button
-            //                 className="pull-right"
-            //                 variant="danger"
-            //                 onClick={this.handleLogout}
-            //               >
-            //                 Logout
-            //               </Button>;
+                </DropdownButton>;
         }
         else {
             login_or_logout = <LoginModal onLogin={this.onLogin}/>;
@@ -100,6 +93,24 @@ class MainBar extends React.Component {
                 />
                 {' VtmV5'}
               </Navbar.Brand>
+              
+              <Nav
+                className="mr-auto"
+                variant="pills"
+                defaultActiveKey="#characters"
+              >
+                <Nav.Link
+                  href="#characters"
+                  onClick={() => this.props.setPage("characters")} >
+                  Characters
+                </Nav.Link>
+
+                <Nav.Link
+                  href="#help"
+                  onClick={() => this.props.setPage("help")}>
+                  Help
+                </Nav.Link>
+              </Nav>
               
               {login_or_logout}
             </Navbar>

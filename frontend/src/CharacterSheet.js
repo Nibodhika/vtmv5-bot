@@ -1,11 +1,8 @@
 import React from 'react';
 
-import {Container, Table, Accordion, Card, Button } from 'react-bootstrap';
+import {Table, Accordion, Card, Badge } from 'react-bootstrap';
 
 class CharacterSheet extends React.Component {
-    constructor(props){
-        super(props);
-    };
 
     build_line(elements){
         return  <SheetLine character={this.props.character}
@@ -22,10 +19,18 @@ class CharacterSheet extends React.Component {
         return <SheetGroup name={name} lines={body}/>;
     }
 
+    disciplines_group(){
+        return null;
+        const body = this.props.character.disciplines.map(
+            (discipline) => this.build_group(discipline)
+        );
+        return body;
+    }
+
     render(){
 
         return (
-            <Accordion>
+            <>
               {this.build_group(
                   "General",
                   [['name', 'concept', 'predator'],
@@ -38,21 +43,33 @@ class CharacterSheet extends React.Component {
                    ['dexterity', 'manipulation', 'wits'],
                    ['stamina', 'composure', 'resolve'],
                   ])}
-            </Accordion>
+              {/*TODO This should not be hardcoded in case of home-rules skills*/}
+              {this.build_group(
+                  "Skills",
+                  [['athletics', 'animal_ken', 'academics'],
+                   ['brawl', 'etiquette', 'awareness'],
+                   ['craft', 'insight', 'finance'],
+                   ['drive', 'intimidation', 'investigation'],
+                   ['firearms', 'leadership', 'medicine'],
+                   ['larceny', 'performance', 'occult'],
+                   ['melee', 'persuasion', 'politics'],
+                   ['stealth', 'streetwise', 'science'],
+                   ['survival', 'subterfuge', 'technology'],
+                  ])},
+              {this.disciplines_group()}
+            </>
         );
     }
 };
 
 function SheetGroup(props){
     return (
-        <Card>
-          <Card.Header>
-            <Accordion.Toggle as={Button}
-                              variant="link"
-                              eventKey={props.name}>
-              {props.name}
-            </Accordion.Toggle>
-          </Card.Header>
+        <Accordion defaultActiveKey={props.name}>
+        <Card border='danger'>
+          <Accordion.Toggle as={Card.Header}
+                            eventKey={props.name}>
+            {props.name}
+          </Accordion.Toggle>
         <Accordion.Collapse eventKey={props.name}>
             <Card.Body>
               <Table
@@ -66,12 +83,14 @@ function SheetGroup(props){
             </Card.Body>
           </Accordion.Collapse>
         </Card>
+        </Accordion>
     );
 }
 
 function SheetLine(props){
     const elements = props.elements.map(
         function(elem){
+
             if(elem)
                 return <SheetElement
                          key={elem}
@@ -90,8 +109,11 @@ function SheetLine(props){
 }
 
 function SheetElement(props){
+    var value = props.value || '-';
     return (
-        <td>{props.name}: {props.value}</td>
+        <td>
+          {props.name} <Badge pill variant="dark">{value}</Badge>
+        </td>
     );
 }
 

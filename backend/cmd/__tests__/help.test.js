@@ -15,7 +15,7 @@ test('base', () => {
     
     check_cmd(author,
                   "!help wrong",
-                  `I don't know about "wrong"`)
+                  `Unknown topic "wrong"`)
 })
 
 test('clan', () => {

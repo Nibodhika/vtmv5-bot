@@ -14,7 +14,6 @@ var Character = require('../../models/character')
 
 router.get('/', function(req, res, next) {
     var characters = Character.all()
-    console.log(characters)
     res.send(characters)
     return
     if(req.session.user.is_gm){

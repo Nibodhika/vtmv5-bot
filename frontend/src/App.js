@@ -2,7 +2,7 @@ import React from 'react';
 
 import './App.css';
 
-import {Card, Accordion, Button } from 'react-bootstrap';
+import {Card, Accordion } from 'react-bootstrap';
 
 import MainBar from './MainBar';
 import CharacterSheet from './CharacterSheet';
@@ -11,15 +11,42 @@ class MainScreen extends React.Component {
 
     constructor(props){
         super(props);
-        
+
+        this.state = {
+            page: "characters",
+        };
+
+        this.setPage = this.setPage.bind(this);
+    }
+
+    setPage(page){
+        this.setState({page:page});
     }
 
     render(){
+
+        let main_content;
+        if(this.state.page === "characters"){
+            main_content = <CharacterList />;
+        }
+        else if(this.state.page === "help"){
+            main_content = <HelpPage />;
+        }
+        
         return (
-            <CharacterList />
-    );    
+            <>
+              <MainBar setPage={this.setPage} />
+              {main_content}
+            </>
+        );    
     }
     
+}
+
+class HelpPage extends React.Component {
+    render(){
+        return null;
+    }
 }
 
 class CharacterList extends React.Component {
@@ -37,13 +64,11 @@ class CharacterList extends React.Component {
         const listItems = this.state.characters.map(
             (character) =>
                 <Card key={character.name}>
-                  <Card.Header>
-                    <Accordion.Toggle as={Button}
-                                      variant="link"
-                                      eventKey={character.id}>
-                      {character.name}
-                    </Accordion.Toggle>
-                  </Card.Header>
+                  <Accordion.Toggle as={Card.Header}
+                                    variant="link"
+                                    eventKey={character.id}>
+                    {character.name}
+                  </Accordion.Toggle>
 
                   <Accordion.Collapse eventKey={character.id}>
                     <Card.Body>
@@ -72,7 +97,7 @@ function App() {
           <link
             rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
 
-          <MainBar />
+          
 
           <MainScreen />
           

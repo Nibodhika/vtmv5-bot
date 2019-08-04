@@ -44,6 +44,7 @@ router.get('/logout', function(req, res) {
 // Index
 // router.use('/user', require('./user'));
 router.use('/character', require('./character'));
+router.use('/help', require('./help'));
 
 
 module.exports = router;
