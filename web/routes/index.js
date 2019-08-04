@@ -16,7 +16,7 @@ router.post('/login', function(req, res){
     if(user != undefined){
         req.session.user = user
         // Go back to the page the user was trying to access, or to /
-        redirectTo = req.session.redirectTo || '/'
+        var redirectTo = req.session.redirectTo || '/'
         res.redirect(redirectTo)
     }
     else{
@@ -32,7 +32,8 @@ router.use(function(req, res, next){
         req.session.redirectTo = req.path
         res.redirect('/login');
     }
-    next()
+    else
+        next()
 })
 // Delete the user from the session
 router.get('/logout', function(req, res) {

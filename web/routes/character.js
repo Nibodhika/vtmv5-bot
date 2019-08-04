@@ -13,7 +13,20 @@ filters.my_test = function (text, options) {
 
 
 router.get('/', function(req, res, next) {
-    res.render('character', {character: req.session.user.character});
+    if(req.session.user.is_gm){
+        var characters = Character.all()
+
+        var character_list = []
+        for(var i in characters){
+            var chara = characters[i]
+            character_list.push({text:chara.name, url: req.originalUrl + chara.id})
+        }
+                
+        res.render('list_characters', {character_list:character_list});
+    }
+    else{
+        res.render('character', {character: req.session.user.character});
+    }
 });
 
 router.get('/:id', function(req, res, next) {
