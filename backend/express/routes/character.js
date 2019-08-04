@@ -4,28 +4,35 @@ var router = express.Router();
 var rules = require('../../rules')
 var Character = require('../../models/character')
 
-var filters = require('pug').filters
-filters.my_test = function (text, options) {
-    if (options.addStart) text = 'Start\n' + text;
-    if (options.addEnd)   text = text + '\nEnd';
-    return text;
-}
+// var filters = require('pug').filters
+// filters.my_test = function (text, options) {
+//     if (options.addStart) text = 'Start\n' + text;
+//     if (options.addEnd)   text = text + '\nEnd';
+//     return text;
+// }
 
 
 router.get('/', function(req, res, next) {
+    var characters = Character.all()
+    console.log(characters)
+    res.send(characters)
+    return
     if(req.session.user.is_gm){
         var characters = Character.all()
+        res.send(characters)
+        
+        // var character_list = []
+        // for(var i in characters){
+        //     var chara = characters[i]
+        //     character_list.push({text:chara.name, url: req.originalUrl + chara.id})
+        // }
 
-        var character_list = []
-        for(var i in characters){
-            var chara = characters[i]
-            character_list.push({text:chara.name, url: req.originalUrl + chara.id})
-        }
-                
-        res.render('list_characters', {character_list:character_list});
+        
+        // res.render('list_characters', {character_list:character_list});
     }
     else{
-        res.render('character', {character: req.session.user.character});
+        res.send(character)
+        // res.render('character', {character: req.session.user.character});
     }
 });
 
