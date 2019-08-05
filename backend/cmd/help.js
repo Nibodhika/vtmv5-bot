@@ -34,9 +34,39 @@ function help_cmd(msg, args){
     var topic = args[1] || null;
     if(topic){
         var specification = args[2] || null;
-        reply = Help.get(topic,specification); 
-    }
+        reply = Help.get(topic,specification);
+        console.log(reply)
+        
+        if(reply.specifications){
+            // Simple specification list
+            if(Array.isArray(reply.specifications)){
+                var specification_text = "\n- " + reply.specifications.join("\n- ")
+                reply = reply.text + specification_text
+            } else{
+                // Specifications is an object, should reply in an embed
+                var fields = []
+                for(var k in reply.specifications){
+                    var line = "- " + reply.specifications[k].join("\n- ")
+                    fields.push({
+                        name: k,
+                        inline: true,
+                        value: line
+                    })
+                }
+                reply = {
+                    embed: {
+                        title: reply.text,
+                        fields: fields
+                    }
+                }
 
+            }
+        } else {
+            reply = reply.text
+        }
+        
+    }
+    console.log(reply)
     msg.reply(reply);
 }
 

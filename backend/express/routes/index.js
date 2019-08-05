@@ -45,6 +45,7 @@ router.get('/logout', function(req, res) {
 // router.use('/user', require('./user'));
 router.use('/character', require('./character'));
 router.use('/help', require('./help'));
+router.use('/rules', require('./rules'));
 
 
 module.exports = router;

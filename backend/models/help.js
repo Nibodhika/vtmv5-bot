@@ -3,7 +3,9 @@ var rules = require('../rules')
 var Character = require('./character')
 
 function help_attr_skill(alias, unalias_function, what, dict) {
-    reply = ''
+    var reply = '';
+    var specifications = null;
+    
     if(alias) {
         var name = unalias_function(alias)
         if(name === undefined){
@@ -16,16 +18,27 @@ function help_attr_skill(alias, unalias_function, what, dict) {
         }
     }
     else{
-        reply = `Available ${what}s (and alias) are:`
-        for(var elem in dict){
-            reply += '\n-  ' + elem + " ("+dict[elem].alias+")"
+        reply = `Available ${what}s are:`
+        specifications = {
+            'physical': [],
+            'social': [],
+            'mental': [],
         }
+        for(var k in dict){
+            var elem = dict[k]
+            specifications[elem.type].push(k)
+        }
+        
+        // specifications = Object.keys(dict)
     }
-    return reply
+    return {
+        text: reply,
+        specifications: specifications
+    }
 }
 
 function base_help_advantage(advantage_name, dict, has_points, name){
-
+    var specifications = null;
     if(advantage_name) {
 
         if(Object.keys(dict).indexOf(advantage_name) > -1){
@@ -46,67 +59,60 @@ function base_help_advantage(advantage_name, dict, has_points, name){
     }
     else {
 
-        var merits = ''
-        var flaws = ''
+        var merits = []
+        var flaws = []
         for(var advantage in dict){
             var adv = dict[advantage]
             var line = ''
             if('points' in adv)
-                line = '\n-  ' + advantage + '('+adv.points+')'
+                line = advantage + ' ('+adv.points+')'
             else
-                line = '\n-  ' + advantage
-            if(adv.flaw)
-                flaws += line
-            else
-                merits += line
-        }        
-        reply = {
-            embed: {
-                title: name,
-                fields : [
-                    {
-                        name:'Merits',
-                        inline:true,
-                        value: merits
-                    },
-                    {
-                        name:'Flaws',
-                        inline:true,
-                        value: flaws
-                    }
-                ]
-            }
+                line = advantage
+
+            adv.flaw ? flaws.push(line) : merits.push(line)
+        }
+        reply = name
+        specifications = {
+            "Merits": merits,
+            "Flaws": flaws,
         }
     }
-    return reply
+    return {
+        text: reply,
+        specifications: specifications
+    }
 }
 
 module.exports = {
 
     TOPICS: {
         clan : ['clans', 'clan'],
-        attr : ['attributes', 'attribute', 'attr'],
-        skills : ['skill', 'skills'],
+        attribute : ['attributes', 'attribute', 'attr'],
+        skill : ['skill', 'skills'],
         advantage : ['advantages','advantage','adv'],
         thin_blood_adv : ['thin_blood_advantages', 'thin_blood_advantage', 'thin_blood_adv'],
-        topics: ['topic', 'topics'],
-        disciplines: ['discipline', 'disciplines'],
+        topic: ['topic', 'topics'],
+        discipline: ['discipline', 'disciplines'],
         predator_type: ['predator_type'],
         reroll: ['reroll'],
         humanity: ['humanity'],
-        tenets: ['tenets']
+        tenet: ['tenet', 'tenets']
     },
     
-    topics: function(args){
+    topic: function(args){
         var reply = `Available topics are:`
         for(var t in this.TOPICS){
             reply += '\n- ' + this.TOPICS[t]
         }
-        return reply
+        return {
+            text: `Available topics are:`,
+            specifications: Object.keys(this.TOPICS)
+        }
     },
 
     clan: function(clan_name=null) {
         var reply = ''
+        var specifications = null
         if(clan_name) {
             if(Object.keys(rules.clans).indexOf(clan_name) > -1) {
                 var clan = rules.clans[clan_name]
@@ -126,15 +132,16 @@ module.exports = {
             }
         }
         else{
-            reply = "The clan represents the vampire bloodline, available clans are:\n"
-            for(var clan in rules.clans){
-                reply += '- ' + clan + '\n'
-            }
+            reply = "The clan represents the vampire bloodline, available clans are:"
+            specifications = Object.keys(rules.clans)
         }
-        return reply
+        return {
+            text:reply,
+            specifications:specifications
+        }
     },
 
-    attr: function(attr_name=null) {
+    attribute: function(attr_name=null) {
         return help_attr_skill(attr_name,
                                Character.unalias_attr,
                                'attribute',
@@ -164,19 +171,29 @@ module.exports = {
     },
 
     discipline: function(discipline_name=null){
+        var reply = ""
+
+        var specifications = Object.keys(rules.disciplines)
         if(discipline_name) {
-            if(Object.keys(rules.disciplines).indexOf(discipline_name) > -1)
-                return rules.disciplines[discipline_name]
-            return `Unknown discipline ${discipline_name}`
+            if(Object.keys(rules.disciplines).indexOf(discipline_name) > -1){
+                reply = rules.disciplines[discipline_name]
+                specifications = null
+            }
+            else
+                reply = `Unknown discipline ${discipline_name}, Available ones are:`
         }
-        var reply = 'Available disciplines are:'
-        for(var discipline in rules.disciplines)
-            reply += '\n- ' + discipline
-        return reply
+        else
+            reply = 'Available disciplines are:'
+
+        return {
+            text: reply,
+            specifications: specifications
+        }
     },
 
     reroll: function(){
-        return `Gives you a point of superficial damage to willpower and alows you to reroll up to three dice by values or types, e.g. "!reroll 1,2,3" would reroll all previous dice (that can be rerolled) that came out 1,2 or 3. There are also some alias:
+        return {
+            text: `Gives you a point of superficial damage to willpower and alows you to reroll up to three dice by values or types, e.g. "!reroll 1,2,3" would reroll all previous dice (that can be rerolled) that came out 1,2 or 3. There are also some alias:
 
 - fail: rerolls anything that came 1,2,3,4,5
 - tens: rerolls dices that came out 10
@@ -184,11 +201,14 @@ module.exports = {
 - messy: rerolls all failures and 10, useful for when you rolled a messy critical but still need more successes
 
 You can combine values and types using , or +, e.g. "!reroll fail+10" is the same as "!reroll messy" or "!reroll 1,2,3,4,5,tens"
-`
+`,
+            specifications: null
+        }
     },
 
     predator_type: function(type_name=null){
         var reply = ""
+        var specifications = null
         if(type_name) {
             if(Object.keys(rules.predator_type).indexOf(type_name) > -1){
                 var type = rules.predator_type[type_name]
@@ -203,18 +223,20 @@ You can combine values and types using , or +, e.g. "!reroll fail+10" is the sam
         }
         else{
             reply = "Available predator types are:"
-            for(var type in rules.predator_type){
-                reply += '\n- ' + type
-            }
+            specifications = Object.keys(rules.predator_type)
         }
-        return reply
+        return {
+            text: reply,
+            specifications: specifications
+        }
     },
 
 
     humanity: function(humanity_level=null){
+        var specifications = null
         if(humanity_level) {
             if(isNaN(humanity_level) || humanity_level < 0 || humanity_level > 10){
-                reply = `args[2] is not a valid humanity level, only numbers from 0 to 10 are valid`
+                reply = `${humanity_level} is not a valid humanity level, only numbers from 0 to 10 are valid`
             }
             
             var reply = `Humanity ${humanity_level} has the following characteristics:`
@@ -225,10 +247,15 @@ You can combine values and types using , or +, e.g. "!reroll fail+10" is the sam
         }
         else{
             reply = "Humanity measures how human your vampire still is, give a level to get rule information for that humanity level"
+            specifications = Object.keys(rules.humanity)
+        }
+        return {
+            text: reply,
+            specifications: specifications
         }
     },
 
-    tenets: function(){
+    tenet: function(){
         var config = require('../config.json');
 
         var reply = "No tennet information"
@@ -244,7 +271,7 @@ You can combine values and types using , or +, e.g. "!reroll fail+10" is the sam
     get(topic,specification){
         reply = undefined
         if(! topic){
-            reply = this.topics()
+            reply = this.topic()
         }
         else if(topic in this){
             reply = this[topic](specification)
@@ -253,6 +280,7 @@ You can combine values and types using , or +, e.g. "!reroll fail+10" is the sam
                 reply = `Unknown topic "${topic}"`
                 var names = this.TOPICS[t]
                 if(names.indexOf(topic) > -1){
+                    console.log(t)
                     reply = this[t](specification)
                     break;
                 }

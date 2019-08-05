@@ -19,14 +19,13 @@ class MainBar extends React.Component {
         fetch('/api/login')
             .then(function (response) {
                 if(response.status === 200){
-                    var user = response.json()
+                    response.json()
                         .then((user) => 
                               self.setState({
                                   user: user
                               })
                              );
-                }
-                else{
+                } else{
                     self.setState({user:null});
                 }
             });

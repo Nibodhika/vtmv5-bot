@@ -5,6 +5,7 @@ import './App.css';
 import {Card, Accordion } from 'react-bootstrap';
 
 import MainBar from './MainBar';
+import HelpPage from './Help';
 import CharacterSheet from './CharacterSheet';
 
 class MainScreen extends React.Component {
@@ -43,11 +44,7 @@ class MainScreen extends React.Component {
     
 }
 
-class HelpPage extends React.Component {
-    render(){
-        return null;
-    }
-}
+
 
 class CharacterList extends React.Component {
 
