@@ -64,10 +64,10 @@ function base_help_advantage(advantage_name, dict, has_points, name){
         for(var advantage in dict){
             var adv = dict[advantage]
             var line = ''
-            if('points' in adv)
-                line = advantage + ' ('+adv.points+')'
-            else
-                line = advantage
+            // if('points' in adv)
+            //     line = advantage + ' ('+adv.points+')'
+            // else
+            line = advantage
 
             adv.flaw ? flaws.push(line) : merits.push(line)
         }
