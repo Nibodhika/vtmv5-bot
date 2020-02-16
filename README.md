@@ -1,3 +1,5 @@
+This project has been abandoned in favor of https://gitlab.com/Nibodhika/gmnotes which is a more complete solution.
+
 Vtmv5-bot is a Vampire the Masquerade 5th edition bot for discord written in Node.
 
 For information on how to use the bot refer to the wiki, this readme is just about setting up the bot.
@@ -12,7 +14,7 @@ In order for the bot to connect to discord you will need to first create a bot a
  "tenets": [
     "First campaign tenet goes here",
     "Second campaign tenet goes here",
-    "Third campaign tenet goes here",
+    "Third campaign tenet goes here"
     ]
 }
 
